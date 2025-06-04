@@ -8,7 +8,7 @@ const fetchUser = (req,res,next)=>{
     }
     try {
         const data = jwt.verify(token, process.env.JWT_SECRET);
-        req.admin = data.admin;
+        req.user = data.users;
         next();
     } catch (error) {
         return res.status(400).json({message:"Please authenticate the user first"})

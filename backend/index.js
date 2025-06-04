@@ -10,6 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/v1/admin',require('./routes/admin'));
+app.use('/api/v1/user',require('./routes/user'));
 
 app.listen(port, () => {
   console.log(`Example app listening on port http://localhost:${port}`)
