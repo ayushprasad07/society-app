@@ -12,7 +12,7 @@ const fetchAdmin = require('../middleware/fetchAdmin');
 const Society = require('../models/Society');
 const User = require('../models/User');
 const Notice = require('../models/Notice');
-
+const Event = require('../models/Event');
 
 // ROUTE 1: Post route to create a admin '/signUp'
 router.post('/signUp', upload.single('adminImage'), [
@@ -192,11 +192,12 @@ router.delete('/reject-request/:id',fetchAdmin,async(req,res)=>{
 router.post('/create-notice',fetchAdmin,async(req,res)=>{
   try {
     const {title,content,type} = req.body;
+    const admin = await Admin.findById(req.admin.id)
     const notice = await Notice.create({
       title,
       content,
       type,
-      society:req.admin.society
+      society:admin.society
     });
     res.status(200).json({message:"Notice created Successfully",notice});
   } catch (error) {
@@ -204,5 +205,27 @@ router.post('/create-notice',fetchAdmin,async(req,res)=>{
     return res.status(500).json({message:"Internal Server error"});
   }
 })
+
+//ROUTE 9 : Create a event by the admin '/create-event'
+router.post('/create-event',fetchAdmin,async(req,res)=>{
+  try {
+    const {title,content,eventImage,eventDate,venue,organizedBy} = req.body;
+    const admin = await Admin.findById(req.admin.id);
+    const event  = await Event.create({
+      title,
+      content,
+      eventDate,
+      eventImage,
+      organizedBy,
+      venue,
+      society: admin.society
+    })
+    res.status(200).json({message:"Event Created Successfully",event});
+  } catch (error) {
+    return res.status(500).json({message:"Internal Server error"});
+  }
+})
+
+
 
 module.exports = router;

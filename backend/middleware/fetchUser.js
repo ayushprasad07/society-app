@@ -14,3 +14,5 @@ const fetchUser = (req,res,next)=>{
         return res.status(400).json({message:"Please authenticate the user first"})
     }
 }
+
+module.exports = fetchUser;

@@ -8,6 +8,9 @@ const {upload} = require('../middleware/multer.middleware');
 const fs = require('fs')
 const jwt = require('jsonwebtoken');
 require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') });
+const Notice = require('../models/Notice');
+const fetchUser = require('../middleware/fetchUser');
+const Event = require('../models/Event')
 
 // ROUTE 1: Post route to create a user '/signUp'
 router.post('/signUp',upload.single('userImage') ,[
@@ -97,6 +100,35 @@ router.post('/login',[
     } catch (error) {
         console.error("Login Error:", error);
         return res.status(500).json({message:"Internal Server Error"});
+    }
+})
+
+//ROUTE 3 : To get all teh notices for the user of specific society '/get-notice'
+router.get('/get-notices',fetchUser,async(req,res)=>{
+    try {
+        const user = await User.findById(req.user.id);
+        if(!user || !user.society){
+            return res.status(400).json({message:"User or society not found"});
+        }
+        const notice = await Notice.find({society:user.society}).sort({ createdAt: -1 });
+        res.status(200).json({message:"Notice fetched successfully",notice});
+    } catch (error) {
+        return res.status(500).json({message:"Internal Server error"});
+    }
+})
+
+// ROUTE 4 : To get all events for teh user of specific society '/get-events'
+router.get('/get-events',fetchUser,async(req,res)=>{
+    try {
+        const user = await User.findById(req.user.id);
+        if(!user || !user.society){
+            return res.status(400).json({message:"User os society not found"});
+        }
+        const event = await Event.find({society:user.society});
+        res.status(200).json({message:"Event Fetched Successfully", event});
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message:"Some error occured. Cannot fetch events!!"});
     }
 })
 
