@@ -10,5 +10,5 @@ const societySchema = new Schema({
   adminId:{type:mongoose.Schema.Types.ObjectId, ref:'Admin',required:true}
 });
 
-const Society = mongoose.model('society',societySchema);
+const Society = mongoose.model('Society',societySchema);
 module.exports = Society;

@@ -53,7 +53,7 @@ router.post('/signUp',upload.single('userImage') ,[
         }
 
         const authToken = jwt.sign(data,process.env.JWT_SECRET);
-        res.status(200).json({message:"Account created Successfully",user,authToken});
+        res.status(200).json({message:"Account created Successfully and request is send to the admin",user,authToken});
 
     } catch (error) {
         return res.status(500).json({message:"Internal Server error"});
@@ -62,7 +62,6 @@ router.post('/signUp',upload.single('userImage') ,[
 
 // ROUTE 2 : login a user '/login' no login required
 router.post('/login',[
-    body('name','Enter a valid name').isLength({min:3}),
     body('email','Enter a valid email').isEmail(),
     body('password','Enter a valid password').isLength({min:5})
 ], async(req,res)=>{

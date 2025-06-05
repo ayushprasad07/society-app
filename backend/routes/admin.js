@@ -10,6 +10,9 @@ const {uploadOnCloud} = require('../utils/cloudinary');
 const fs = require('fs');
 const fetchAdmin = require('../middleware/fetchAdmin');
 const Society = require('../models/Society');
+const User = require('../models/User');
+const Notice = require('../models/Notice');
+
 
 // ROUTE 1: Post route to create a admin '/signUp'
 router.post('/signUp', upload.single('adminImage'), [
@@ -70,7 +73,7 @@ router.post('/login', [
 
   try {
     const { email, password } = req.body;
-    const admin = await Admin.findOne({ email });
+    const admin = await Admin.findOne({ email }).populate('society');
     if (!admin) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
@@ -111,8 +114,7 @@ router.post('/create-society',fetchAdmin,async(req,res)=>{
       pincode,
       adminId:req.admin.id
     })
-    await Admin.findByIdAndUpdate(req.admin._id,{society: society._id});
-    // const populatedAdmin = await Society.findById(society._id).populate('adminId');
+    await Admin.findByIdAndUpdate(req.admin.id,{society: society._id});
     res.status(200).json({message:"Society created Successfully",society})
   } catch (error) {
     console.log(error);
@@ -120,5 +122,87 @@ router.post('/create-society',fetchAdmin,async(req,res)=>{
   }
 })
 
+//ROUTE 4 : for the admin to check the pendonr request '/pending-request'
+router.post('/pending-request',fetchAdmin,async(req,res)=>{
+  try {
+    const pendingRequests = await User.find({isValid:false}).populate('society');
+    if(pendingRequests.length ===0 ){
+      return res.status(400).json({message:"No pending request"});
+    }
+
+    res.status(200).json({pendingRequests})
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({message:"Internal server error"});
+  }
+})
+
+//ROUTE 5 : for the admin to update the isValid parameter '/approve-request/:id'
+router.post('/approve-request/:id',fetchAdmin,async(req,res)=>{
+  try {
+    const userId = req.params.id;
+    const user = await  User.findById(userId);
+    if(!user){
+      return res.status(400).json({message:"User not found"});
+    }
+    if(user.isValid){
+      return res.status(400).json({message:"Request already acepted"});
+    }
+
+    user.isValid = true;
+    user.save();
+
+    res.status(200).json({message:"Permission granted",user})
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({message:"Internal Server error"});
+  }
+})
+
+// ROUTE 6: for teh admin to view all the residents
+router.get('/viewAllRequests',fetchAdmin,async(req,res)=>{
+  try {
+    const user = await User.find({isValid:true})
+    if(user.length===0){
+      return res.status(400).json({message:"Currently no peson in the society"});
+    }
+    res.status(200).json({message:"Fetched Successfully",user});
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({message:"Internal Server error"})
+  }
+})
+
+//ROUTE 7: Reject the request of the user '/reject-request/:id'
+router.delete('/reject-request/:id',fetchAdmin,async(req,res)=>{
+  try {
+    const userId = req.params.id;
+    const user = await User.findByIdAndDelete(userId);
+    if(!user){
+      return res.status(500).json({message:"User  not found"});
+    }
+    res.status(200).json({message:"Request deleted Successfully",user});
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({messsage:"Internal Server error"});
+  }
+})
+
+// ROUTE 8: Create a notice for the society '/create-notice'
+router.post('/create-notice',fetchAdmin,async(req,res)=>{
+  try {
+    const {title,content,type} = req.body;
+    const notice = await Notice.create({
+      title,
+      content,
+      type,
+      society:req.admin.society
+    });
+    res.status(200).json({message:"Notice created Successfully",notice});
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({message:"Internal Server error"});
+  }
+})
 
 module.exports = router;
