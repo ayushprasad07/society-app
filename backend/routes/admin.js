@@ -13,6 +13,7 @@ const Society = require('../models/Society');
 const User = require('../models/User');
 const Notice = require('../models/Notice');
 const Event = require('../models/Event');
+const {sendConfirmationEmail} = require('../utils/email');
 
 // ROUTE 1: Post route to create a admin '/signUp'
 router.post('/signUp', upload.single('adminImage'), [
@@ -141,7 +142,7 @@ router.post('/pending-request',fetchAdmin,async(req,res)=>{
 router.post('/approve-request/:id',fetchAdmin,async(req,res)=>{
   try {
     const userId = req.params.id;
-    const user = await  User.findById(userId);
+    const user = await  User.findById(userId).populate('society');
     if(!user){
       return res.status(400).json({message:"User not found"});
     }
@@ -151,8 +152,8 @@ router.post('/approve-request/:id',fetchAdmin,async(req,res)=>{
 
     user.isValid = true;
     user.save();
-
-    res.status(200).json({message:"Permission granted",user})
+    sendConfirmationEmail(user.society.name, user.email);
+    res.status(200).json({message:"Permission granted and mail successfully",user})
   } catch (error) {
     console.log(error)
     res.status(500).json({message:"Internal Server error"});
@@ -226,6 +227,6 @@ router.post('/create-event',fetchAdmin,async(req,res)=>{
   }
 })
 
-
+//ROUTE 10: Create a buy or sell option
 
 module.exports = router;
