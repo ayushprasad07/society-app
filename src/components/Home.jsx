@@ -1,46 +1,114 @@
-import React from 'react';
-import image from '../image/society.png';
-import './Home.css'; // import CSS for icon responsiveness
+import Footer from './Footer';
+import './Home.css'; 
 
 const Home = () => {
   return (
     <>
       {/* Hero Section */}
         <div
-            className="card text-center"
+            className="card text-center rounded-0 "
             style={{
-            background: 'linear-gradient(to right, white, #e6f6fa 30%, #e6f6fa 70%, white)',
-            border: 'none',
+                background: 'linear-gradient(to right, #03045e, #0096c7)',
+                border: 'none',
+                position: 'relative',
+                overflow: 'hidden',
+                color:"white"
             }}
         >
-            <div className="row g-0">
-            <div className="col-md-4 d-flex align-items-center">
-                <img src={image} className="img-fluid rounded-start" alt="CommunityHub" />
-            </div>
-            <div className="col-md-8 d-flex align-items-center">
-                <div className="card-body">
-                <h1 className="card-title">Welcome to the CommunityHub</h1>
-                <p>
-                    Your digital notice board for local announcements, events, and neighborhood connections.
-                </p>
-                <form className="d-flex" role="search">
-                    <input
-                    className="form-control me-2"
-                    type="search"
-                    placeholder="Search for your society"
-                    aria-label="Search"
-                    />
-                    <button className="btn btn-outline-primary" type="submit">
-                    Search
-                    </button>
-                </form>
+            
+            <div className='container'>
+                <div className="row g-0 d-flex justify-content-center align-items-center">
+                    <div className="col-md-6 d-flex align-items-center text-start">
+                        <div className="card-body">
+                            <h1 className="card-title fw-bold">Welcome to the</h1>
+                            <h1 className="card-title fw-bold" style={{color:"#0077b6"}}>CommunityHub</h1>
+                            <p>
+                            Your digital notice board for local announcements, events, and neighborhood connections. Stay informed, stay connected, stay engaged with your community.
+                            </p>
+                            <a href="/" className="btn btn-primary my-3">Get Started as a Admin</a>
+                            <div className='container my-3'>
+                                <div className='row'>
+                                    <div className='col-md-12 d-flex justify-content-around text-center'>
+                                        <div>
+                                            <i className="fa-solid fa-circle-check"></i>
+                                            <p >500+ communities</p>
+                                        </div>
+                                        <div>
+                                            <i className="fa-solid fa-circle-check"></i>
+                                            <p >Verified societies</p>
+                                        </div>
+                                        <div>
+                                            <i className="fa-solid fa-circle-check"></i>
+                                            <p>24/7 Support</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div
+                    className="card col-md-5 d-flex align-items-center my-5"
+                    style={{
+                        background: 'rgba(255, 255, 255, 0.5)',
+                        backdropFilter: 'blur(20px)',
+                        WebkitBackdropFilter: 'blur(20px)',
+                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                        borderRadius: '16px',
+                        padding: '2rem',
+                    }}
+                    >
+                        <h2 className="mb-4">Quick Access</h2>
+                        <div className="row w-100 gx-3 gy-3">
+                            <div className="col-6">
+                            <button className="btn btn-light bg-white rounded shadow-sm p-3 text-start w-100 h-100 d-flex flex-column justify-content-between" style={{ minHeight: "150px", cursor: "pointer", outline:"none" }}>
+                                <i className="fa-solid fa-bullhorn my-2"></i>
+                                <p className="mb-2">View Announcement</p>
+                                <i className="fa-solid fa-arrow-right"></i>
+                            </button>
+                            </div>
+                            <div className="col-6">
+                            <button className="btn btn-light bg-white rounded shadow-sm p-3 text-start w-100 h-100 d-flex flex-column justify-content-between" style={{ minHeight: "150px", cursor: "pointer", outline:"none" }}>
+                                <i className="fa-solid fa-calendar my-2"></i>
+                                <p className="mb-2">Browse Events</p>
+                                <i className="fa-solid fa-arrow-right"></i>
+                            </button>
+                            </div>
+                            <div className="col-6">
+                            <button className="btn btn-light bg-white rounded shadow-sm p-3 text-start w-100 h-100 d-flex flex-column justify-content-between" style={{ minHeight: "150px", cursor: "pointer", outline:"none" }}>
+                                <i className="fa-solid fa-bag-shopping my-2"></i>
+                                <p className="mb-2">Market Place</p>
+                                <i className="fa-solid fa-arrow-right"></i>
+                            </button>
+                            </div>
+                            <div className="col-6">
+                            <button className="btn btn-light bg-white rounded shadow-sm p-3 text-start w-100 h-100 d-flex flex-column justify-content-between" style={{ minHeight: "150px", cursor: "pointer", outline:"none" }}>
+                                <i className="fa-solid fa-phone-volume my-2"></i>
+                                <p className="mb-2">Contect Dictionary</p>
+                                <i className="fa-solid fa-arrow-right"></i>
+                            </button>
+                            </div>
+                            <p>Every thing you need in one place</p>
+                        </div>
+                </div>
                 </div>
             </div>
-            </div>
+            <svg
+                viewBox="0 0 1440 120"
+                xmlns="http://www.w3.org/2000/svg"
+                style={{ display: 'block', width: '100%', height: 'auto' }}
+            >
+                <path
+                fill="white"
+                fillOpacity="1"
+                d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z"
+                ></path>
+            </svg>
         </div>
 
+
       {/* Feature Section */}
-        <div className="card text-center border-0 my-4 container">
+        <div className="card text-center border-0  container">
             <div className="card-body">
             <h1 className="card-title">Why Choose CommunityHub?</h1>
             <p className="card-text text-muted">
@@ -50,8 +118,8 @@ const Home = () => {
 
                 <div className="row justify-content-center">
                     <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 border-0" data-aos="fade-up">
-                        <div className="card h-100 border-0 feature-card" style={{ boxShadow: '0px 5px 5px grey' }}>
-                            <div className="card-body text-center">
+                        <div className="card h-100 border-0 " style={{ boxShadow: '0px 5px 5px grey',cursor:"pointer" }}>
+                            <div className="card-body text-center feature-card">
                             <i className="fa-solid fa-business-time icon-responsive mb-3"></i>
                             <h5 className="card-title">Real-Time Updates</h5>
                             <p className="card-text">
@@ -62,8 +130,8 @@ const Home = () => {
                     </div>
 
                     <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4" data-aos="fade-up">
-                        <div className="card h-100 border-0 feature-card" style={{ boxShadow: '0px 5px 5px grey' }}>
-                            <div className="card-body text-center">
+                        <div className="card h-100 border-0" style={{ boxShadow: '0px 5px 5px grey',cursor:"pointer" }}>
+                            <div className="card-body text-center feature-card">
                             <i className="fa-solid fa-message icon-responsive mb-3"></i>
                             <h5 className="card-title">Easy Communication</h5>
                             <p className="card-text">
@@ -74,8 +142,8 @@ const Home = () => {
                     </div>
 
                     <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4" data-aos="fade-up">
-                        <div className="card h-100 border-0 feature-card" style={{ boxShadow: '0px 5px 5px grey' }}>
-                            <div className="card-body text-center">
+                        <div className="card h-100 border-0 " style={{ boxShadow: '0px 5px 5px grey',cursor:"pointer" }}>
+                            <div className="card-body text-center feature-card">
                             <i className="fa-solid fa-star icon-responsive mb-3"></i>
                             <h5 className="card-title">User-Friendly Design</h5>
                             <p className="card-text">
@@ -86,8 +154,8 @@ const Home = () => {
                     </div>
 
                     <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 " data-aos="fade-up">
-                        <div className="card h-100 border-0 feature-card" style={{ boxShadow: '0px 5px 5px grey' }}>
-                            <div className="card-body text-center">
+                        <div className="card h-100 border-0 " style={{ boxShadow: '0px 5px 5px grey',cursor:"pointer" }}>
+                            <div className="card-body text-center feature-card">
                             <i className="fa-regular fa-circle-check icon-responsive mb-3"></i>
                             <h5 className="card-title">Reliable & Maintained</h5>
                             <p className="card-text">
@@ -300,12 +368,7 @@ const Home = () => {
                 </div>
             </div>
         </div>
-        <div className="card text-center rounded-0" style={{backgroundColor:"black",color:'white'}}>
-            <div className="card-body">
-                <h5 className="card-title">For any query contect : ayushprasad2110@gmail.com</h5>
-                <p className="card-text"><i className="fa-solid fa-copyright mx-2"></i>Team CommunityHub</p>
-            </div>
-        </div>
+        <Footer/>
     </>
   );
 };
