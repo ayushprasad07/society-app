@@ -35,13 +35,19 @@ router.post('/signUp', upload.single('adminImage'), [
     const salt = bcrypt.genSaltSync(10);
     const hashPass = await bcrypt.hash(req.body.password, salt);
 
-    const localFilePath = req.file.path;
-    const adminImageUpload = await uploadOnCloud(localFilePath);
-    fs.unlinkSync(localFilePath);
+    let imageUrl = '';
+      if (req.file) {
+        const localFilePath = req.file.path;
+        const adminImageUpload = await uploadOnCloud(localFilePath);
+
+        imageUrl = adminImageUpload.secure_url;
+        fs.unlinkSync(localFilePath);
+      }
+
 
     admin = await Admin.create({
       name: req.body.name,
-      adminImage: adminImageUpload.secure_url,
+      adminImage: imageUrl,
       email: req.body.email,
       password: hashPass,
       gender: req.body.gender

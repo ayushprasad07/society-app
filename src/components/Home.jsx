@@ -1,12 +1,18 @@
 import Footer from './Footer';
 import './Home.css'; 
+import call from '../image/call.png'
+import announcement from '../image/Announcement.png'
+import event from '../image/Events.png'
+import market from '../image/MarketPlace.png'
+import building from '../image/Community Building.png'
+import secure from '../image/secure.png'
 
 const Home = () => {
   return (
     <>
       {/* Hero Section */}
         <div
-            className="card text-center rounded-0 "
+            className="card text-center rounded-0 my-5"
             style={{
                 background: 'linear-gradient(to right, #03045e, #0096c7)',
                 border: 'none',
@@ -174,7 +180,7 @@ const Home = () => {
                     <div className="card-body">
                         <div className='d-flex justify-content-center align-items-top'>
                             <div className='mx-3'>
-                                <i className="fa-solid fa-bullhorn"></i>
+                                <img className='img-fluid' src={announcement} alt='Community Announcements'/>
                             </div>
                             <div>
                                 <h2 className="card-title">Community Announcements</h2>
@@ -198,7 +204,7 @@ const Home = () => {
                     <div className="card-body">
                         <div className='d-flex justify-content-center align-items-top'>
                             <div className='mx-3'>
-                                <i className="fa-solid fa-calendar"></i>
+                                 <img className='img-fluid' src={event} alt='Community Announcements'/>
                             </div>
                             <div>
                                 <h2 className="card-title">Local Events & Activities</h2>
@@ -222,7 +228,7 @@ const Home = () => {
                     <div className="card-body">
                      <div className='d-flex justify-content-center align-items-top'>
                             <div className='mx-3'>
-                                <i className="fa-solid fa-bag-shopping"></i>
+                                 <img className='img-fluid' src={market} alt='Community Announcements'/>
                             </div>
                             <div>
                                 <h2 className="card-title">Neighborhood Marketplace</h2>
@@ -246,7 +252,7 @@ const Home = () => {
                     <div className="card-body">
                      <div className='d-flex justify-content-center align-items-top'>
                             <div className='mx-3'>
-                                <i className="fa-solid fa-phone"></i>
+                                 <img className='img-fluid' src={call} alt='Community Announcements'/>
                             </div>
                             <div>
                                 <h2 className="card-title">Essential Contacts</h2>
@@ -270,7 +276,7 @@ const Home = () => {
                     <div className="card-body">
                      <div className='d-flex justify-content-center align-items-top'>
                             <div className='mx-3'>
-                                <i className="fa-solid fa-shield"></i>
+                                 <img className='img-fluid' src={secure} alt='Community Announcements'/>
                             </div>
                             <div>
                                 <h2 className="card-title">Secure & Private</h2>
@@ -294,7 +300,7 @@ const Home = () => {
                     <div className="card-body">
                      <div className='d-flex justify-content-center align-items-top'>
                             <div className='mx-3'>
-                                <i className="fa-solid fa-person"></i>
+                                 <img className='img-fluid' src={building} alt='Community Announcements'/>
                             </div>
                             <div>
                                 <h2 className="card-title">Community Building</h2>
