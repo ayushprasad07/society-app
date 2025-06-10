@@ -234,5 +234,13 @@ router.post('/create-event',fetchAdmin,async(req,res)=>{
 })
 
 //ROUTE 10: Create a buy or sell option
-
+router.get('/get-admin/:id',fetchAdmin,async (req,res)=>{
+  try {
+    const adminId = req.params.id;
+    const admin = await Admin.findById(adminId).populate('society');
+    res.status(200).json({admin}); 
+  } catch (error) {
+    res.status(500).json({message:"Internal Server error"});
+  }
+})
 module.exports = router;

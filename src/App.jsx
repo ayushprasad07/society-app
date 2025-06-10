@@ -8,6 +8,8 @@ import Home from './components/Home';
 import Choice from './components/Choice';
 import AdminSignUp from './components/AdminSignUp';
 import AdminPage from './components/AdminPage';
+import Login from './components/Login';
+import UserPage from './components/UserPage';
 
 function App() {
   useEffect(() => {
@@ -25,6 +27,8 @@ function App() {
         <Route path="/choice" element={<Choice />} />
         <Route path='/admin-sign-up' element={<AdminSignUp/>}/>
         <Route path='/admin-page' element={<AdminPage/>}/>
+        <Route path='/user-page' element={<UserPage/>}/>
+        <Route path='/login' element={<Login/>}/>
       </Routes>
     </Router>
   );

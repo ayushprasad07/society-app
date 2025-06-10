@@ -31,7 +31,7 @@ const Home = () => {
                             <p>
                             Your digital notice board for local announcements, events, and neighborhood connections. Stay informed, stay connected, stay engaged with your community.
                             </p>
-                            <a href="/" className="btn btn-primary my-3">Get Started as a Admin</a>
+                            <a href="/admin-sign-up" className="btn btn-primary my-3">Get Started as a Admin</a>
                             <div className='container my-3'>
                                 <div className='row'>
                                     <div className='col-md-12 d-flex justify-content-around text-center'>
@@ -175,7 +175,7 @@ const Home = () => {
         </div>
         <div className="card conatiner p-3 border-0">
             <div className="row g-3">
-                <div className="col-12 col-sm-6 col-md-4" data-aos="fade-up">
+                <div className="col-12 col-sm-6" data-aos="fade-up">
                 <div className="card h-100 border-0 function-card">
                     <div className="card-body">
                         <div className='d-flex justify-content-center align-items-top'>
@@ -199,7 +199,7 @@ const Home = () => {
                 </div>
                 </div>
 
-                <div className="col-12 col-sm-6 col-md-4" data-aos="fade-up">
+                <div className="col-12 col-sm-6 " data-aos="fade-up">
                 <div className="card h-100 function-card">
                     <div className="card-body">
                         <div className='d-flex justify-content-center align-items-top'>
@@ -223,7 +223,7 @@ const Home = () => {
                 </div>
                 </div>
 
-                <div className="col-12 col-sm-6 col-md-4" data-aos="fade-up">
+                <div className="col-12 col-sm-6 " data-aos="fade-up">
                 <div className="card h-100 function-card">
                     <div className="card-body">
                      <div className='d-flex justify-content-center align-items-top'>
@@ -247,7 +247,7 @@ const Home = () => {
                 </div>
                 </div>
 
-                <div className="col-12 col-sm-6 col-md-4" data-aos="fade-up">
+                <div className="col-12 col-sm-6 " data-aos="fade-up">
                 <div className="card h-100  function-card">
                     <div className="card-body">
                      <div className='d-flex justify-content-center align-items-top'>
@@ -271,7 +271,7 @@ const Home = () => {
                 </div>
                 </div>
 
-                <div className="col-12 col-sm-6 col-md-4" data-aos="fade-up">
+                <div className="col-12 col-sm-6" data-aos="fade-up">
                 <div className="card h-100 function-card">
                     <div className="card-body">
                      <div className='d-flex justify-content-center align-items-top'>
@@ -295,7 +295,7 @@ const Home = () => {
                 </div>
                 </div>
 
-                <div className="col-12 col-sm-6 col-md-4" data-aos="fade-up">
+                <div className="col-12 col-sm-6" data-aos="fade-up">
                 <div className="card h-100  function-card">
                     <div className="card-body">
                      <div className='d-flex justify-content-center align-items-top'>

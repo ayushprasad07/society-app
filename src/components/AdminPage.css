@@ -1,0 +1,23 @@
+a.btn:hover {
+  box-shadow: 0 0 20px  #7fcaf0 !important;
+  transition: box-shadow 0.3s ease-in-out;
+  outline: none;
+}
+
+.typing-text {
+  font-family: 'Courier New', monospace;
+  white-space: pre-wrap;
+  font-size: 1.1rem;
+}
+
+.cursor {
+  display: inline-block;
+  width: 1ch;
+  animation: blink 0.7s steps(1) infinite;
+  color: #000;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+

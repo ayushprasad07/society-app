@@ -3,6 +3,7 @@ import Footer from './Footer'
 import logo from '../image/CommunityHub logo.png'
 import noImage from '../image/default.jpg'
 import { useNavigate } from 'react-router'
+import './AdminSignUp.css'
 
 const AdminSignUp = () => {
     const [credentials,setCredentials] = useState({name:"",email:"",password:"",gender:""})
@@ -48,8 +49,10 @@ const AdminSignUp = () => {
     }
   return (
     <>
-        <div className='container' style={{marginTop:"70px",marginBottom:"50px"}}>
-            <div className="card p-5" >
+        <div className='container d-flex justify-content-center align-items-center' style={{marginTop:"70px",marginBottom:"50px"}}>
+            <div className="card p-4"  style={{
+                        width:"100%", maxWidth:"500px",boxShadow:"0px 0px 20px white"
+                    }}>
                 <img 
                 src={logo} 
                 alt="TutorConnect Logo"
