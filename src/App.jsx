@@ -10,6 +10,7 @@ import AdminSignUp from './components/AdminSignUp';
 import AdminPage from './components/AdminPage';
 import Login from './components/Login';
 import UserPage from './components/UserPage';
+import Residents from './components/Residents';
 
 function App() {
   useEffect(() => {
@@ -29,6 +30,7 @@ function App() {
         <Route path='/admin-page' element={<AdminPage/>}/>
         <Route path='/user-page' element={<UserPage/>}/>
         <Route path='/login' element={<Login/>}/>
+        <Route path='/residents' element={<Residents/>}/>
       </Routes>
     </Router>
   );

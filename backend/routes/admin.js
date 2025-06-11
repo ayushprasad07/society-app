@@ -14,6 +14,7 @@ const User = require('../models/User');
 const Notice = require('../models/Notice');
 const Event = require('../models/Event');
 const {sendConfirmationEmail} = require('../utils/email');
+const e = require('express');
 
 // ROUTE 1: Post route to create a admin '/signUp'
 router.post('/signUp', upload.single('adminImage'), [
@@ -95,7 +96,7 @@ router.post('/login', [
         id: admin._id.toString()
       }
     };
-    const authToken = jwt.sign(data, process.env.JWT_SECRET);
+    const authToken = jwt.sign(data, process.env.JWT_SECRET,{ expiresIn: "1h" });
 
     res.status(200).json({ message: "Logged in successfully", admin, authToken });
 
@@ -129,10 +130,12 @@ router.post('/create-society',fetchAdmin,async(req,res)=>{
   }
 })
 
-//ROUTE 4 : for the admin to check the pendonr request '/pending-request'
+//ROUTE 4 : for the admin to check the pending request '/pending-request'
 router.post('/pending-request',fetchAdmin,async(req,res)=>{
   try {
-    const pendingRequests = await User.find({isValid:false}).populate('society');
+    const adminId = req.admin.id;
+    const admin = await Admin.findById(adminId);
+    const pendingRequests = await User.find({society:admin.society ,isValid:false}).populate('society');
     if(pendingRequests.length ===0 ){
       return res.status(400).json({message:"No pending request"});
     }
@@ -169,7 +172,9 @@ router.post('/approve-request/:id',fetchAdmin,async(req,res)=>{
 // ROUTE 6: for teh admin to view all the residents
 router.get('/viewAllRequests',fetchAdmin,async(req,res)=>{
   try {
-    const user = await User.find({isValid:true})
+    const adminId = req.admin.id;
+    const admin = await Admin.findById(adminId);
+    const user = await User.find({society:admin.society,isValid:true})
     if(user.length===0){
       return res.status(400).json({message:"Currently no peson in the society"});
     }
@@ -191,7 +196,7 @@ router.delete('/reject-request/:id',fetchAdmin,async(req,res)=>{
     res.status(200).json({message:"Request deleted Successfully",user});
   } catch (error) {
     console.log(error)
-    return res.status(500).json({messsage:"Internal Server error"});
+    return res.status(500).json({message:"Internal Server error"});
   }
 })
 
@@ -233,7 +238,7 @@ router.post('/create-event',fetchAdmin,async(req,res)=>{
   }
 })
 
-//ROUTE 10: Create a buy or sell option
+//ROUTE 10: Get a admin thorugh id
 router.get('/get-admin/:id',fetchAdmin,async (req,res)=>{
   try {
     const adminId = req.params.id;
@@ -243,4 +248,35 @@ router.get('/get-admin/:id',fetchAdmin,async (req,res)=>{
     res.status(500).json({message:"Internal Server error"});
   }
 })
+
+//ROUTE 11: Get teh number of events
+router.get('/get-events',fetchAdmin,async(req,res)=>{
+  try {
+    const admin = await Admin.findById(req.admin.id).populate('society');
+    if(!admin || !admin.society){
+      return res.status(400).json({message:"Admin or society not found"});
+    }
+    const event = await Event.find({society:admin.society}).sort({date:1});
+    res.status(200).json({message:"fetched successfully",event});
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({message:"Internal Server error"});
+  }
+})
+
+///ROUTE 12: Get the number of notices publiched;
+router.get('/get-notice',fetchAdmin,async(req,res)=>{
+  try {
+    const admin = await Admin.findById(req.admin.id);
+    if(!admin || !admin.society){
+      return res.status(400).json({message:"Admin or society not found"});
+    }
+    const notices = await Event.find({society:admin.society}).sort({date:1});
+    res.status(200).json({message:"fetched successfully",notices});
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({message:"Internal Server error"});
+  }
+})
+
 module.exports = router;
