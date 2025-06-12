@@ -374,6 +374,28 @@ const Home = () => {
                 </div>
             </div>
         </div>
+        <div>
+            <div
+                className="position-fixed bottom-0 end-0 p-3"
+                style={{
+                zIndex: 1100,
+                width: '100%',
+                maxWidth: '250px',
+                }}
+            >
+                <div
+                className="toast show shadow bg-white my-2"
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+                data-bs-autohide="false"
+                >
+                <div className="toast-body">
+                    Made with ❤️ by Ayush
+                </div>
+                </div>
+            </div>
+        </div>
         <Footer/>
     </>
   );

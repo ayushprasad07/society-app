@@ -11,6 +11,9 @@ import AdminPage from './components/AdminPage';
 import Login from './components/Login';
 import UserPage from './components/UserPage';
 import Residents from './components/Residents';
+import Requests from './components/Requests';
+import Notices from './components/Notices';
+import Events from './components/Events';
 
 function App() {
   useEffect(() => {
@@ -31,6 +34,9 @@ function App() {
         <Route path='/user-page' element={<UserPage/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/residents' element={<Residents/>}/>
+        <Route path='/requests' element={<Requests/>}/>
+        <Route path='/notices' element={<Notices/>}/>
+        <Route path='/events' element={<Events/>}/>
       </Routes>
     </Router>
   );

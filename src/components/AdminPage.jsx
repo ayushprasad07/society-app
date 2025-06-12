@@ -4,6 +4,10 @@ import { jwtDecode } from "jwt-decode";
 import Footer from "./Footer";
 import './AdminPage.css';
 import { Link } from "react-router";
+import adminEvents from '../image/upcoming-events.png'
+import adminNotice from '../image/admin-notice.png'
+import adminRequest from '../image/admin-request.png'
+import adminResident from '../image/admin-resident.png'
 
 const AdminPage = () => {
   const [society, setSociety] = useState(null);
@@ -151,7 +155,7 @@ const AdminPage = () => {
         </div>
       )}
       {society && (
-        <div className="d-flex justify-content-center align-items-center vh-100">
+        <div className="d-flex justify-content-center align-items-center vh-100 my-5">
           <div className="card border-0">
             <div className="card-body">
               <h1>Welcome Admin,</h1>
@@ -160,49 +164,89 @@ const AdminPage = () => {
                 <strong>{society.name}</strong>
               </p>
               <div className="row w-100 gx-3 gy-3 my-5">
-                <div className="col-6">
+                <div className="col-12 col-md-6 col-sd-12">
                   <Link
                     to="/residents"
                     className="btn btn-light bg-white rounded shadow-sm p-3 text-start w-100 h-100 d-flex flex-column justify-content-between border-0"
                     style={{ minHeight: "150px", cursor: "pointer", outline: "none" }}
                   >
-                    <p className="mb-2">Total Residents</p>
-                    <h1>{residents}</h1>
-                    <i className="fa-solid fa-arrow-right"></i>
+                    <div className="d-flex">
+                      <div>
+                        <img src={adminResident} className="img-fluid mx-2" alt="events" style={{ maxWidth: "40px", height: "auto" }} />
+                      </div>
+                      <div>
+                        <p className="mb-2">Total Residents</p>
+                        <h1>{residents}</h1>
+                        
+                      </div>
+                    </div>
+                    <div className="text-end">
+                      <i className="fa-solid fa-arrow-right fs-5"></i>
+                    </div>
                   </Link>
                 </div>
-                <div className="col-6">
-                  <a
-                    href="#"
+                <div className="col-12 col-md-6 col-sd-12">
+                  <Link
+                    to="/requests"
                     className="btn btn-light bg-white rounded shadow-sm p-3 text-start w-100 h-100 d-flex flex-column justify-content-between border-0"
                     style={{ minHeight: "150px", cursor: "pointer", outline: "none" }}
                   >
-                    <p className="mb-2">Pending Request</p>
-                    <h1>{pendinRequest}</h1>
-                    <i className="fa-solid fa-arrow-right"></i>
-                  </a>
+                    <div className="d-flex">
+                      <div>
+                        <img src={adminRequest} className="img-fluid mx-2" alt="events" style={{ maxWidth: "40px", height: "auto" }} />
+                      </div>
+                      <div>
+                        <p className="mb-2">Pending Request</p>
+                        <h1>{pendinRequest}</h1>
+                        
+                      </div>
+                    </div>
+                    <div className="text-end">
+                      <i className="fa-solid fa-arrow-right fs-5"></i>
+                    </div>
+                  </Link>
                 </div>
-                <div className="col-6">
-                  <a
-                    href="#"
+                <div className="col-12 col-md-6 col-sd-12">
+                  <Link
+                    to="/events"
                     className="btn btn-light bg-white rounded shadow-sm p-3 text-start w-100 h-100 d-flex flex-column justify-content-between border-0"
                     style={{ minHeight: "150px", cursor: "pointer", outline: "none" }}
                   >
-                    <p className="mb-2">Upcoming Events</p>
-                    <h1>{events}</h1>
-                    <i className="fa-solid fa-arrow-right"></i>
-                  </a>
+                    <div className="d-flex">
+                      <div>
+                        <img src={adminEvents} className="img-fluid mx-2" alt="events" style={{ maxWidth: "40px", height: "auto" }} />
+                      </div>
+                      <div>
+                        <p className="mb-2">Upcoming Events</p>
+                        <h1>{events}</h1>
+                        
+                      </div>
+                    </div>
+                    <div className="text-end">
+                      <i className="fa-solid fa-arrow-right fs-5"></i>
+                    </div>
+                  </Link>
                 </div>
-                <div className="col-6">
-                  <a
-                    href="#"
+                <div className="col-12 col-md-6 col-sd-12">
+                  <Link
+                    to="/notices"
                     className="btn btn-light bg-white rounded shadow-sm p-3 text-start w-100 h-100 d-flex flex-column justify-content-between border-0"
                     style={{ minHeight: "150px", cursor: "pointer", outline: "none" }}
                   >
-                    <p className="mb-2">Recent Notices</p>
-                    <h1>{notices}</h1>
-                    <i className="fa-solid fa-arrow-right"></i>
-                  </a>
+                    <div className="d-flex">
+                      <div>
+                        <img src={adminNotice} className="img-fluid mx-2" alt="events" style={{ maxWidth: "40px", height: "auto" }} />
+                      </div>
+                      <div>
+                        <p className="mb-2">Recent Notices</p>
+                        <h1>{notices}</h1>
+                        
+                      </div>
+                    </div>
+                    <div className="text-end">
+                      <i className="fa-solid fa-arrow-right fs-5"></i>
+                    </div>
+                  </Link>
                 </div>
               </div>
             </div>

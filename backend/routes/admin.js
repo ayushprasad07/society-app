@@ -219,24 +219,38 @@ router.post('/create-notice',fetchAdmin,async(req,res)=>{
 })
 
 //ROUTE 9 : Create a event by the admin '/create-event'
-router.post('/create-event',fetchAdmin,async(req,res)=>{
-  try {
-    const {title,content,eventImage,eventDate,venue,organizedBy} = req.body;
-    const admin = await Admin.findById(req.admin.id);
-    const event  = await Event.create({
-      title,
-      content,
-      eventDate,
-      eventImage,
-      organizedBy,
-      venue,
-      society: admin.society
-    })
-    res.status(200).json({message:"Event Created Successfully",event});
-  } catch (error) {
-    return res.status(500).json({message:"Internal Server error"});
+router.post('/create-event',fetchAdmin,upload.single('eventImage'), async (req, res) => {
+    try {
+      const { title, content, eventDate, venue, organizedBy } = req.body;
+
+      let imageUrl = '';
+      if (req.file) {
+        const localFilePath = req.file.path;
+        const eventImageUpload = await uploadOnCloud(localFilePath);
+
+        imageUrl = eventImageUpload.secure_url;
+        fs.unlinkSync(localFilePath); 
+      }
+
+      const admin = await Admin.findById(req.admin.id);
+      const event = await Event.create({
+        title,
+        content,
+        eventDate,
+        eventImage: imageUrl,
+        organizedBy,
+        venue,
+        society: admin.society,
+      });
+
+      res.status(200).json({ message: "Event Created Successfully", event });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: "Internal Server error" });
+    }
   }
-})
+);
+
 
 //ROUTE 10: Get a admin thorugh id
 router.get('/get-admin/:id',fetchAdmin,async (req,res)=>{
@@ -249,7 +263,7 @@ router.get('/get-admin/:id',fetchAdmin,async (req,res)=>{
   }
 })
 
-//ROUTE 11: Get teh number of events
+//ROUTE 11: Get the number of events
 router.get('/get-events',fetchAdmin,async(req,res)=>{
   try {
     const admin = await Admin.findById(req.admin.id).populate('society');
@@ -271,7 +285,7 @@ router.get('/get-notice',fetchAdmin,async(req,res)=>{
     if(!admin || !admin.society){
       return res.status(400).json({message:"Admin or society not found"});
     }
-    const notices = await Event.find({society:admin.society}).sort({date:1});
+    const notices = await Notice.find({society:admin.society}).sort({date:1});
     res.status(200).json({message:"fetched successfully",notices});
   } catch (error) {
     console.log(error);
