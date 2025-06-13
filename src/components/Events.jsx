@@ -1,9 +1,73 @@
 import React, { useEffect, useState } from 'react'
 import Footer from './Footer';
 import societyEvent from '../image/society-event.jpg'
+import './Event.css'
 
 const Events = () => {
   const [events,setEvents] = useState([]);
+  const [eventInfo,setEventInfo] = useState({title:"",content:"",venue:"",eventDate:"",organizedBy:""});
+  const [file,setFile] = useState(null)
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(eventInfo);
+    
+    const { title, content, venue, eventDate, organizedBy } = eventInfo;
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("content", content);
+    formData.append("venue", venue);
+    formData.append("eventDate", eventDate);
+    formData.append("organizedBy", organizedBy);
+
+    if (file) {
+      formData.append("eventImage", file);
+    }
+
+    const URL = "http://localhost:4000/api/v1/admin/create-event";
+
+    try {
+      const response = await fetch(URL, {
+        method: "POST",
+        headers: {
+          "auth-token": localStorage.getItem("token"),
+        },
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setEvents((prevEvents) => [...prevEvents, data.event]); 
+        console.log("event created successfully",data)
+        setEventInfo({
+          title: "",
+          content: "",
+          venue: "",
+          eventDate: "",
+          organizedBy: ""
+        });
+        setFile(null);
+        const modalEl = document.getElementById("exampleModal");
+        const modal = bootstrap.Modal.getInstance(modalEl);
+        modal.hide();
+      } else {
+        console.error("Error:", data.message);
+      }
+    } catch (error) {
+      console.error("Network error:", error);
+    }
+  };
+
+
+  const handleChange = (e)=>{
+    if(e.target.name==='eventImage'){
+      setFile(e.target.files[0]);
+    }else{
+      setEventInfo({...eventInfo,[e.target.name]:e.target.value});
+    }
+  }
 
   const getEvents = async()=>{
     try {
@@ -39,16 +103,15 @@ const Events = () => {
         <main className="container py-5 mt-5" style={{ minHeight: "100vh" }}>
             
             <div>
-                
                 <h1>Events</h1>
                 <hr/>
-              <div className='row'>
+              <div className='row '>
                 {events.map((event)=>{
                     return (
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-                          <div className="card h-100 border-bottom border-4 border-primary border-0" key={event._id} style={{boxShadow:"0px 5px 10px grey",cursor:"pointer"}}>
+                        <div key={event._id} className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 my-3">
+                          <div className="card h-100 border-bottom border-4 border-primary border-0 event-card" key={event._id} style={{boxShadow:"0px 5px 10px grey",cursor:"pointer"}}>
                             <img 
-                              src={event.eventImage || societyEvent} 
+                              src={event?.eventImage || societyEvent} 
                               className="card-img-top img-fluid" 
                               alt="Event" 
                               style={{ objectFit: "cover", height: "200px" }} 
@@ -93,7 +156,7 @@ const Events = () => {
                 data-bs-autohide="false"
                 >
                 <div className="toast-body border-0">
-                    <button type="button"  className="btn btn-primary rounded-circle "><i className="fa-solid fa-plus"></i></button>
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"  className="btn btn-primary rounded-circle "><i className="fa-solid fa-plus"></i></button>
                 </div>
                 </div>
                 <div
@@ -109,13 +172,13 @@ const Events = () => {
                 </div>
             </div>
         </div>
-        {/* <button type="button" className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Open modal for @mdo</button>
+        <button type="button" className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Open modal for @mdo</button>
 
         <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div className="modal-dialog">
                 <div className="modal-content">
                 <div className="modal-header">
-                    <h1 className="modal-title fs-5" id="exampleModalLabel">Create notice</h1>
+                    <h1 className="modal-title fs-5" id="exampleModalLabel">Create Event</h1>
                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div className="modal-body">
@@ -129,29 +192,30 @@ const Events = () => {
                         <textarea className="form-control" id="content" name='content' onChange={handleChange}></textarea>
                     </div>
                     <div className="mb-3">
-                        <label htmlFor="type" className="form-label d-block">Type : </label>
-                        <div className="form-check form-check-inline">
-                        <input className="form-check-input" type="radio" name="type" id="maintenance" value="maintenance" onChange={handleChange} />
-                        <label className="form-check-label" htmlFor="maintenance">Maintenance</label>
-                        </div>
-                        <div className="form-check form-check-inline">
-                        <input className="form-check-input" type="radio" name="type" id="emergency" value="emergency" onChange={handleChange} />
-                        <label className="form-check-label" htmlFor="emergency">Emergency</label>
-                        </div>
-                        <div className="form-check form-check-inline">
-                        <input className="form-check-input" type="radio" name="type" id="general" value="general" onChange={handleChange} />
-                        <label className="form-check-label" htmlFor="general">General</label>
-                        </div>
+                        <label htmlFor="eventImage" className="col-form-label">Image :</label>
+                        <input type="file" className="form-control" id="eventImage" name='eventImage' onChange={handleChange}/>
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="eventDate" className="col-form-label">Event Date and Time :</label>
+                        <input type="datetime-local" className="form-control" id="eventDate" name='eventDate' onChange={handleChange}/>
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="venue" className="col-form-label">Venue :</label>
+                        <input type="text" className="form-control" id="venue" name='venue' onChange={handleChange}/>
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="organizedBy" className="col-form-label">Organized By :</label>
+                        <input type="text" className="form-control" id="organizedBy" name='organizedBy' onChange={handleChange}/>
                     </div>
                     <div className="modal-footer">
                         <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" className="btn btn-primary">Create Notice</button>
+                        <button type="submit" className="btn btn-primary">Create Event</button>
                     </div>
                     </form>
                 </div>
                 </div>
-            </div> */}
-        {/* </div> */}
+            </div> 
+        </div>
         <Footer/>
     </>
   )

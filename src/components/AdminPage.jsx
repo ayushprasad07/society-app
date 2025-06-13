@@ -167,7 +167,7 @@ const AdminPage = () => {
                 <div className="col-12 col-md-6 col-sd-12">
                   <Link
                     to="/residents"
-                    className="btn btn-light bg-white rounded shadow-sm p-3 text-start w-100 h-100 d-flex flex-column justify-content-between border-0"
+                    className="btn btn-light border-start border-4 border-primary bg-white rounded shadow-sm p-3 text-start w-100 h-100 d-flex flex-column justify-content-between border-0"
                     style={{ minHeight: "150px", cursor: "pointer", outline: "none" }}
                   >
                     <div className="d-flex">
@@ -188,7 +188,7 @@ const AdminPage = () => {
                 <div className="col-12 col-md-6 col-sd-12">
                   <Link
                     to="/requests"
-                    className="btn btn-light bg-white rounded shadow-sm p-3 text-start w-100 h-100 d-flex flex-column justify-content-between border-0"
+                    className="btn border-start border-4 border-primary btn-light bg-white rounded shadow-sm p-3 text-start w-100 h-100 d-flex flex-column justify-content-between border-0"
                     style={{ minHeight: "150px", cursor: "pointer", outline: "none" }}
                   >
                     <div className="d-flex">
@@ -209,7 +209,7 @@ const AdminPage = () => {
                 <div className="col-12 col-md-6 col-sd-12">
                   <Link
                     to="/events"
-                    className="btn btn-light bg-white rounded shadow-sm p-3 text-start w-100 h-100 d-flex flex-column justify-content-between border-0"
+                    className="btn border-start border-4 border-primary btn-light bg-white rounded shadow-sm p-3 text-start w-100 h-100 d-flex flex-column justify-content-between border-0"
                     style={{ minHeight: "150px", cursor: "pointer", outline: "none" }}
                   >
                     <div className="d-flex">
@@ -230,7 +230,7 @@ const AdminPage = () => {
                 <div className="col-12 col-md-6 col-sd-12">
                   <Link
                     to="/notices"
-                    className="btn btn-light bg-white rounded shadow-sm p-3 text-start w-100 h-100 d-flex flex-column justify-content-between border-0"
+                    className="btn border-start border-4 border-primary btn-light bg-white rounded shadow-sm p-3 text-start w-100 h-100 d-flex flex-column justify-content-between border-0"
                     style={{ minHeight: "150px", cursor: "pointer", outline: "none" }}
                   >
                     <div className="d-flex">
