@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Footer from './Footer';
+import noEvent from '../image/No-events.png'
 import societyEvent from '../image/society-event.jpg'
 import './Event.css'
 
@@ -105,6 +106,11 @@ const Events = () => {
             <div>
                 <h1>Events</h1>
                 <hr/>
+                {events.length===0 && 
+                                    <div>
+                                        <img src={noEvent} alt='no notice' className='img-fluid'/>
+                                    </div>
+                                }
               <div className='row '>
                 {events.map((event)=>{
                     return (

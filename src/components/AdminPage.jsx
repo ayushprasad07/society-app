@@ -15,6 +15,46 @@ const AdminPage = () => {
   const [pendinRequest,setPendingRequest] = useState(0);
   const [events,setEvents] = useState(0);
   const [notices,setNotices] = useState(0);
+  const [societyInfo,setSocietyInfo] = useState({name:"",address:"",city:"",state:"",pincode:""})
+
+  const createSociety = async(e)=>{
+    e.preventDefault();
+    console.log(societyInfo);
+    try {
+      const{name,address,city,state,pincode} = societyInfo;
+      const URL = "http://localhost:4000/api/v1/admin/create-society";
+      const response = await fetch(URL,{
+        method:"POST",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+        body: JSON.stringify({
+          name,
+          address,
+          city,
+          state,
+          pincode
+        })
+      })
+      const data = await response.json();
+      console.log("Society created successfully");
+      if (response.ok) {
+        setSociety(data.society); 
+        setSocietyInfo({ name: "", address: "", city: "", state: "", pincode: "" }); 
+        const modal = bootstrap.Modal.getInstance(document.getElementById('exampleModal'));
+        modal.hide();
+      } else {
+        alert(data.message || "Failed to create society.");
+      }
+    } catch (error) {
+      console.log("error:",error);
+    }
+  }
+
+  const handleChange  = (e)=>{
+    setSocietyInfo({...societyInfo,[e.target.name]:e.target.value})
+  }
 
   const getAdmin = async () => {
     try {
@@ -130,11 +170,17 @@ const AdminPage = () => {
 
   useEffect(() => {
     getAdmin();
-    getResidents();
-    getPendingRequest();
-    getEvents();
-    getNotices();
   }, []);
+
+  useEffect(() => {
+    if (society) {
+      getResidents();
+      getPendingRequest();
+      getEvents();
+      getNotices();
+    }
+  }, [society]);
+
 
   return (
     <>
@@ -147,9 +193,9 @@ const AdminPage = () => {
               <p className="card-text text-muted my-3">
                 Get started by creating a new society.
               </p>
-              <a href="#" className="btn btn-primary">
+              <button data-bs-toggle="modal" data-bs-target="#exampleModal" className="btn btn-primary">
                 Create Society
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -253,6 +299,47 @@ const AdminPage = () => {
           </div>
         </div>
       )}
+      <button type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Open modal for @mdo</button>
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Create Society</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              <form onSubmit={createSociety}>
+                <div className="mb-3">
+                  <label htmlFor="name" className="col-form-label">Society Name:</label>
+                  <input type="text" className="form-control" id="name" name="name" onChange={handleChange}/>
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="address" className="col-form-label">Address:</label>
+                  <input type="text" className="form-control" id="address" name="address" onChange={handleChange} />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="city" className="col-form-label">City:</label>
+                  <input type="text" className="form-control" id="city" name="city" onChange={handleChange}/>
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="state" className="col-form-label">State :</label>
+                  <input type="text" className="form-control" id="state" name="state" onChange={handleChange}/>
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="pincode" className="col-form-label">Pincode :</label>
+                  <input type="number" className="form-control" id="pincode" name="pincode" onChange={handleChange}/>
+                </div>
+
+                {/* Modal footer inside the form */}
+                <div className="modal-footer">
+                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" className="btn btn-primary">Create Society</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
       <Footer />
     </>
   );

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import noSociety from '../image/No-society.png';
+import noNotice from '../image/No notice.png'
 import Footer from './Footer';
 
 const Notices = () => {
@@ -75,12 +76,17 @@ const Notices = () => {
 
   return (
     <>
-        <div className='container d-flex justify-content-center align-items-center vh-100' style={{marginTop:"150px",marginBottom:"100px"}}>
+        <div className='container py-5 mt-5' style={{ minHeight: "100vh" }}>
             
             <div className='card container  p-3'>
                 
                 <h1>Notices</h1>
                 <hr/>
+                {notices.length===0 && 
+                    <div>
+                        <img src={noNotice} alt='no notice' className='img-fluid'/>
+                    </div>
+                }
                 {notices.map((notice)=>{
                     return (
                         <div className="card border-start border-4 border-primary my-3 border-0" key={notice._id} style={{boxShadow:"0px 5px 10px grey",cursor:"pointer"}}>
