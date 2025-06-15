@@ -21,7 +21,7 @@ const Choose = () => {
             <img src={noImage} className="card-img-top rounded-circle" alt="..." />
             <div className="card-body">
               <h5 className="card-title">User</h5>
-              <Link to="/teacher" className="btn btn-primary">Sign up</Link>
+              <Link to="/user-sign-up" className="btn btn-primary">Sign up</Link>
             </div>
           </div>
         </div>

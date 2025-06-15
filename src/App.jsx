@@ -14,6 +14,7 @@ import Residents from './components/Residents';
 import Requests from './components/Requests';
 import Notices from './components/Notices';
 import Events from './components/Events';
+import UserSignUp from './components/UserSignUp';
 
 function App() {
   useEffect(() => {
@@ -30,6 +31,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/choice" element={<Choice />} />
         <Route path='/admin-sign-up' element={<AdminSignUp/>}/>
+        <Route path='/user-sign-up' element={<UserSignUp/>}/>
         <Route path='/admin-page' element={<AdminPage/>}/>
         <Route path='/user-page' element={<UserPage/>}/>
         <Route path='/login' element={<Login/>}/>

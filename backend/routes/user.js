@@ -33,16 +33,21 @@ router.post('/signUp',upload.single('userImage') ,[
             return res.status(400).json({message:"A image is requiered"})
         }
 
-        const localFilePath = req.file.path;
-        const userImageUpload = await uploadOnCloud(localFilePath)
-        fs.unlinkSync(localFilePath);
+        let imageUrl = '';
+        if (req.file) {
+            const localFilePath = req.file.path;
+            const userImageUpload = await uploadOnCloud(localFilePath);
+
+            imageUrl = userImageUpload.secure_url;
+            fs.unlinkSync(localFilePath);
+        }
 
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password,salt);
 
         var user = await User.create({
             name,
-            userImage: userImageUpload.secure_url,
+            userImage: imageUrl,
             email,
             password: hashedPassword,
             gender,
@@ -59,6 +64,7 @@ router.post('/signUp',upload.single('userImage') ,[
         res.status(200).json({message:"Account created Successfully and request is send to the admin",user,authToken});
 
     } catch (error) {
+        console.log(error);
         return res.status(500).json({message:"Internal Server error"});
     }
 });
