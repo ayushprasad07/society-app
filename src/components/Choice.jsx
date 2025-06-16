@@ -6,7 +6,7 @@ import Footer from './Footer'
 const Choose = () => {
   return (
     <>
-    <div className='d-flex justify-content-center align-items-center' style={{minHeight:"100vh"}}>
+    <div className='d-flex justify-content-center align-items-center p-5 my-5' style={{minHeight:"100vh"}}>
       <div className="container " >
         <div className="row justify-content-center">
           <div className="card text-center col-md-3 mx-2 my-2 justify-content-center" style={{ width: "18rem" }}>

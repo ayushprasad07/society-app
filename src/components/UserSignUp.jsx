@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import logo from '../image/CommunityHub logo.png'
 import Footer from './Footer'
 import noImage from '../image/default.jpg'
-import { toast, ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css'; 
+import { toast } from "react-toastify";
+// import 'react-toastify/dist/ReactToastify.css'; 
 import { useNavigate } from 'react-router';
 
 const UserSignUp = () => {
@@ -78,9 +78,8 @@ const UserSignUp = () => {
                 toast.success(data.message || "Account created successfully!");
                 localStorage.setItem('token', data.authToken);
                 localStorage.setItem('userId', data.user._id);
-                setTimeout(() => {
-                    navigator("/user-page");
-                }, 2000); // Small delay to show toast before navigating
+                toast.success(data.message || "Account created successfully!");
+                navigator("/user-page");
             } else {
                 toast.error(data.message || "Signup failed");
             }
@@ -171,7 +170,6 @@ const UserSignUp = () => {
                     </form>
                 </div>
             </div>
-            <ToastContainer position="top-end" autoClose={5000} theme="colored" />
             <Footer />
         </>
     )

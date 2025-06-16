@@ -2,7 +2,8 @@ import { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-
+import { ToastContainer } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 import Choice from './components/Choice';
@@ -27,6 +28,12 @@ function App() {
   return (
     <Router>
       <Navbar />
+      <ToastContainer
+        position="top-center"
+        autoClose={4000}
+        theme="colored"
+        pauseOnHover
+      />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/choice" element={<Choice />} />

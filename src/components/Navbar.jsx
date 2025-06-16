@@ -7,6 +7,7 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('adminId');
+    localStorage.removeItem('userId');
     navigate('/');
   };
 
@@ -25,6 +26,20 @@ const Navbar = () => {
             <li className="nav-item">
               <a className="nav-link active" aria-current="page" href="/">Home</a>
             </li>
+            {/* {localStorage.getItem('userId') && (
+              <>
+                <li className="nav-item">
+                  <a className="nav-link active" aria-current="page" href="/">Announcement</a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link active" aria-current="page" href="/profile">Events</a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link active" aria-current="page" href="/profile">Marketplace</a>
+                </li>
+
+              </>
+            )} */}
           </ul>
           
           {isAuthenticated ? (

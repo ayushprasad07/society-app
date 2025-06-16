@@ -1,113 +1,124 @@
-const express = require ('express');
+const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
-const {body,validationResult} = require('express-validator');
+const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
-const {uploadOnCloud} = require('../utils/cloudinary');
-const {upload} = require('../middleware/multer.middleware');
-const fs = require('fs')
+const { uploadOnCloud } = require('../utils/cloudinary');
+const { upload } = require('../middleware/multer.middleware');
+const fs = require('fs');
 const jwt = require('jsonwebtoken');
-require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') });
+const path = require('path');
 const Notice = require('../models/Notice');
+const Event = require('../models/Event');
 const fetchUser = require('../middleware/fetchUser');
-const Event = require('../models/Event')
 
-// ROUTE 1: Post route to create a user '/signUp'
-router.post('/signUp',upload.single('userImage') ,[
-    body('name','Enter a valid name').isLength({min:3}),
-    body('email','Enter a valid email').isEmail(),
-    body('password','Enter a valid password').isLength({min:5})
-],async(req,res)=>{
-    const result = validationResult(req)
-    if(!result.isEmpty()){
-        return res.status(400).json({error:result.array()});
-    }
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+
+/**
+ * ROUTE 1: POST /signUp
+ * Register a new user
+ */
+router.post(
+  '/signUp',
+  upload.single('userImage'),
+  [
+    body('name', 'Name must be at least 3 characters').isLength({ min: 3 }),
+    body('email', 'Invalid email').isEmail(),
+    body('password', 'Password must be at least 5 characters').isLength({ min: 5 }),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.status(400).json({ error: errors.array() });
+
     try {
-        const {name,email,password,gender,society} = req.body;
-        var user = await User.findOne({email});
-        if(user){
-            return res.status(400).json({message:"Sorry! a user with this email is already registered"});
-        }
+      const { name, email, password, gender, society } = req.body;
 
-        if(!req.file){
-            return res.status(400).json({message:"A image is requiered"})
-        }
+      const existingUser = await User.findOne({ email });
+      if (existingUser) return res.status(400).json({ message: 'Email already registered' });
 
-        let imageUrl = '';
-        if (req.file) {
-            const localFilePath = req.file.path;
-            const userImageUpload = await uploadOnCloud(localFilePath);
+      if (!req.file) return res.status(400).json({ message: 'Image is required' });
 
-            imageUrl = userImageUpload.secure_url;
-            fs.unlinkSync(localFilePath);
-        }
+      const localFilePath = req.file.path;
+      const uploadedImage = await uploadOnCloud(localFilePath);
+      fs.unlinkSync(localFilePath); // remove temp image
 
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password,salt);
+      const hashedPassword = await bcrypt.hash(password, 10);
 
-        var user = await User.create({
-            name,
-            userImage: imageUrl,
-            email,
-            password: hashedPassword,
-            gender,
-            society
-        })
+      const newUser = await User.create({
+        name,
+        email,
+        userImage: uploadedImage.secure_url,
+        password: hashedPassword,
+        gender,
+        society,
+      });
 
-        const data = {
-            users:{
-                id: user._id.toString()
-            }
-        }
+      const payload = { users: { id: newUser._id.toString() } };
+      const authToken = jwt.sign(payload, process.env.JWT_SECRET);
 
-        const authToken = jwt.sign(data,process.env.JWT_SECRET);
-        res.status(200).json({message:"Account created Successfully and request is send to the admin",user,authToken});
-
+      res.status(200).json({
+        message: 'Account created successfully. Awaiting admin approval.',
+        user: newUser,
+        authToken,
+      });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({message:"Internal Server error"});
+      console.error('Signup Error:', error);
+      res.status(500).json({ message: 'Internal Server Error during signup' });
     }
-});
+  }
+);
 
-// ROUTE 2 : login a user '/login' no login required
-router.post('/login',[
-    body('email','Enter a valid email').isEmail(),
-    body('password','Enter a valid password').isLength({min:5})
-], async(req,res)=>{
-    const result = validationResult(req);
-    if(!result.isEmpty()){
-        return res.status(400).json({error : result.array()});
-    }
+/**
+ * ROUTE 2: POST /login
+ * Authenticate a user
+ */
+router.post(
+  '/login',
+  [
+    body('email', 'Invalid email').isEmail(),
+    body('password', 'Password must be at least 5 characters').isLength({ min: 5 }),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.status(400).json({ error: errors.array() });
+
     try {
-        const {email,password} = req.body;
-        const user = await User.findOne({email});
+      const { email, password } = req.body;
 
-        if(!user){
-            return res.status(400).json({ message: "Invalid email or password." });
-        }
+      const user = await User.findOne({ email });
+      if (!user) {
+        console.log('❌ No user found with email:', email);
+        return res.status(400).json({ message: 'Invalid email or password.' });
+      }
 
-        const isMatched = await bcrypt.compare(password,user.password);
-        if(!isMatched){
-            return res.status(400).json({message:"Invalid credentials! Please login with the correct credentials"});
-        }
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      if (!passwordMatch) {
+        console.log(`❌ Password mismatch for user: ${email}`);
+        return res.status(400).json({ message: 'Invalid email or password.' });
+      }
 
-        if(!user.isValid){
-            return res.status(400).json({message: "Your account is pending approval. Please wait until an admin reviews and approves your registration."})
-        }
+      const payload = { users: { id: user._id.toString() } };
+      const authToken = jwt.sign(payload, process.env.JWT_SECRET);
 
-        const data = {
-            users:{
-                id: user._id.toString()
-            }
-        }
+      if (!user.isValid) {
+        return res.status(200).json({
+          message: 'Your account is pending approval by admin.',
+          authToken,
+        });
+      }
 
-        const authToken = jwt.sign(data,process.env.JWT_SECRET);
-        res.status(200).json({message:"Logged in Successfully",user,authToken});
+      res.status(200).json({
+        message: 'Logged in successfully',
+        user,
+        authToken,
+      });
     } catch (error) {
-        console.error("Login Error:", error);
-        return res.status(500).json({message:"Internal Server Error"});
+      console.error('Login Error:', error);
+      res.status(500).json({ message: 'Internal Server Error during login' });
     }
-})
+  }
+);
+
 
 //ROUTE 3 : To get all teh notices for the user of specific society '/get-notice'
 router.get('/get-notices',fetchUser,async(req,res)=>{
