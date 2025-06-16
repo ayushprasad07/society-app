@@ -1,9 +1,12 @@
 const mongoose = require('mongoose');
-const mongoURI = 'mongodb+srv://ayushprasad2110:wumrWLDh5102fM4K@mongotute.xesle.mongodb.net/societyManagement?retryWrites=true&w=majority&appName=MongoTute'
+require('dotenv').config({ path: require('path').resolve(__dirname, './.env') });
 
-const connectToMongo = ()=>{
-    mongoose.connect(mongoURI,{});
-    console.log("Connected to mango Successfully.");
+const mongoURI = process.env.DATABASE_URL;
+
+
+const connectToMongo = () => {
+    mongoose.connect(mongoURI, {});
+    console.log("Connected to mongo Successfully.");
 }
 
 module.exports = connectToMongo;
