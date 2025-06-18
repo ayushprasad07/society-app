@@ -149,5 +149,16 @@ router.get('/get-events',fetchUser,async(req,res)=>{
     }
 })
 
+//Route 5 : Get the data of teh loggged in user
+router.get('/get-user/:id',fetchUser,async(req,res)=>{
+    try {
+        const userId = req.params.id;
+        const user = await User.findById(userId);
+        res.status(200).json({message:"fetched user",user});
+    } catch (error) {
+        return res.status(500).json({message:"Internal Server error"});
+    }
+})
+
 
 module.exports = router

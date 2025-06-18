@@ -28,7 +28,7 @@ const Home = () => {
               background: 'linear-gradient(45deg, #ff6b6b, #4ecdc4)',
               top: '10%',
               right: '10%',
-              animation: 'float 6s ease-in-out infinite',
+              animation: 'float 10s ease-in-out infinite',
             }}
           ></div>
           <div 

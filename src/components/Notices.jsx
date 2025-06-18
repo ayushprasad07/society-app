@@ -47,23 +47,44 @@ const Notices = () => {
 
     const getNotices = async()=>{
         try {
-            const URL = "http://localhost:4000/api/v1/admin/get-notice";
-            const response = await fetch(URL,{
-                method:"GET",
-                headers: {
-                "Content-Type": "application/json",
-                "auth-token": localStorage.getItem("token"),
-                },
-            })
-            const data = await response.json();
-            if(Array.isArray(data.notices)){
-               const sortedNotices = data.notices.sort(
-                    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-                );
-                setNotices(sortedNotices);
+            if(localStorage.getItem('adminId')){
+                const URL = "http://localhost:4000/api/v1/admin/get-notice";
+                const response = await fetch(URL,{
+                    method:"GET",
+                    headers: {
+                    "Content-Type": "application/json",
+                    "auth-token": localStorage.getItem("token"),
+                    },
+                })
+                const data = await response.json();
+                if(Array.isArray(data.notices)){
+                const sortedNotices = data.notices.sort(
+                        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+                    );
+                    setNotices(sortedNotices);
+                }else{
+                    console.log("data.notices is not an array");
+                    setNotices([]);
+                }
             }else{
-                console.log("data.notices is not an array");
-                setNotices([]);
+                const URL = "http://localhost:4000/api/v1/user/get-notices";
+                const response = await fetch(URL,{
+                    method:"GET",
+                    headers: {
+                    "Content-Type": "application/json",
+                    "auth-token": localStorage.getItem("token"),
+                    },
+                })
+                const data = await response.json();
+                if(Array.isArray(data.notice)){
+                const sortedNotices = data.notice.sort(
+                        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+                    );
+                    setNotices(sortedNotices);
+                }else{
+                    console.log("data.notices is not an array");
+                    setNotices([]);
+                }
             }
         } catch (error) {
             console.log("error",error);
@@ -78,7 +99,12 @@ const Notices = () => {
     <>
         <div className='container py-5 mt-5' style={{ minHeight: "100vh" }}>
             
-            <div className='card container  p-3'>
+            <div className="card border-0 p-4 event-card" style={{
+                      borderRadius: '20px',
+                      background: 'white',
+                      boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+                      textDecoration: 'none'
+                    }}>
                 
                 <h1>Notices</h1>
                 <hr/>
@@ -89,7 +115,7 @@ const Notices = () => {
                 }
                 {notices.map((notice)=>{
                     return (
-                        <div className="card border-start border-4 border-primary my-3 border-0" key={notice._id} style={{boxShadow:"0px 5px 10px grey",cursor:"pointer"}}>
+                        <div className="card border-start border-4 border-primary my-3 border-0 event-card" key={notice._id} style={{boxShadow:"0px 5px 10px grey",cursor:"pointer"}}>
                             <div className="card-header">
                             {notice.type.charAt(0).toUpperCase() + notice.type.slice(1)}
                             </div>
@@ -112,17 +138,19 @@ const Notices = () => {
                 maxWidth: '250px',
                 }}
             >
-                <div
-                className="mb-2 bg-transparent  show border-0 text-center"
-                role="alert"
-                aria-live="assertive"
-                aria-atomic="true"
-                data-bs-autohide="false"
-                >
-                <div className="toast-body border-0">
-                    <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" className="btn btn-primary rounded-circle "><i className="fa-solid fa-plus"></i></button>
-                </div>
-                </div>
+                {localStorage.getItem("adminId") &&
+                    <div
+                    className="mb-2 bg-transparent  show border-0 text-center"
+                    role="alert"
+                    aria-live="assertive"
+                    aria-atomic="true"
+                    data-bs-autohide="false"
+                    >
+                        <div className="toast-body border-0">
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" className="btn btn-primary rounded-circle "><i className="fa-solid fa-plus"></i></button>
+                        </div>
+                    </div>
+                }
                 <div
                 className="toast show shadow bg-white my-2"
                 role="alert"
