@@ -5,7 +5,7 @@ import noImage from '../image/default.jpg'
 import { useNavigate } from 'react-router'
 import './AdminSignUp.css'
 
-const AdminSignUp = () => {
+const AdminSignUp = (props) => {
     const [credentials,setCredentials] = useState({name:"",email:"",password:"",gender:""})
     const [file,setFile] = useState(null);
 
@@ -14,6 +14,7 @@ const AdminSignUp = () => {
     const handleSubmit = async (e)=>{
         e.preventDefault();
         console.log(credentials);
+        props.setProgress(10);
         const {name,email,password,gender} = credentials;
         const fromData = new FormData();
         fromData.append('name',name);
@@ -23,6 +24,7 @@ const AdminSignUp = () => {
         if(file){
             fromData.append('adminImage',file);
         }
+        props.setProgress(40);
         try {
             const URL = 'http://localhost:4000/api/v1/admin/signUp';
             const response = await fetch(URL,{
@@ -30,12 +32,15 @@ const AdminSignUp = () => {
                 body:fromData
             })
             const json = await response.json();
+            props.setProgress(70);
             if(response.ok){
                 localStorage.setItem('token',json.authToken);
                 localStorage.setItem('adminId',json.admin._id);
+                props.setProgress(100);
                 navigator('/admin-page');
             }
         } catch (error) {
+            props.setProgress(100);
             console.log("An error occured ",error);
         }
     }

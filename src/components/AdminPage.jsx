@@ -8,6 +8,8 @@ import adminEvents from '../image/upcoming-events.png'
 import adminNotice from '../image/admin-notice.png'
 import adminRequest from '../image/admin-request.png'
 import adminResident from '../image/admin-resident.png'
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+
 
 const AdminPage = () => {
   const [society, setSociety] = useState(null);
@@ -16,10 +18,10 @@ const AdminPage = () => {
   const [events,setEvents] = useState(0);
   const [notices,setNotices] = useState(0);
   const [societyInfo,setSocietyInfo] = useState({name:"",address:"",city:"",state:"",pincode:""})
+  const [loading,setLoading] = useState(true);
 
   const createSociety = async(e)=>{
     e.preventDefault();
-    console.log(societyInfo);
     try {
       const{name,address,city,state,pincode} = societyInfo;
       const URL = "http://localhost:4000/api/v1/admin/create-society";
@@ -38,7 +40,6 @@ const AdminPage = () => {
         })
       })
       const data = await response.json();
-      console.log("Society created successfully");
       if (response.ok) {
         setSociety(data.society); 
         setSocietyInfo({ name: "", address: "", city: "", state: "", pincode: "" }); 
@@ -48,7 +49,7 @@ const AdminPage = () => {
         alert(data.message || "Failed to create society.");
       }
     } catch (error) {
-      console.log("error:",error);
+      console.log(error);
     }
   }
 
@@ -69,12 +70,13 @@ const AdminPage = () => {
       });
       const data = await response.json();
       if (data.admin && data.admin.society) {
-        console.log("Your Society", data.admin.society);
+        ("Your Society", data.admin.society);
         setSociety(data.admin.society);
+        setLoading(false);
       }
-      console.log(data);
+      (data);
     } catch (error) {
-      console.log("error", error);
+      console.log(error);
     }
   };
 
@@ -89,7 +91,7 @@ const AdminPage = () => {
         },
       })
       const data = await response.json();
-      console.log("Residents : ", data);
+      ("Residents : ", data);
       if(Array.isArray(data.user)){
         setResidents(data.user.length);
       }else{
@@ -97,7 +99,7 @@ const AdminPage = () => {
         setResidents(0);
       }
     } catch (error) {
-      console.log("error",error);
+      console.log(error);
     }
   }
 
@@ -112,7 +114,7 @@ const AdminPage = () => {
         },
       })
       const data = await response.json();
-      console.log("Pending Requests : ", data);
+      ("Pending Requests : ", data);
       if(Array.isArray(data.pendingRequests)){
         setPendingRequest(data.pendingRequests.length);
       }else{
@@ -120,7 +122,7 @@ const AdminPage = () => {
         setPendingRequest(0);
       }
     } catch (error) {
-      console.log("error",error);
+      console.log(error);
     }
   }
 
@@ -138,11 +140,11 @@ const AdminPage = () => {
       if(Array.isArray(data.event)){
         setEvents(data.event.length);
       }else{
-        console.log("data.event is not an array");
+        ("data.event is not an array");
         setEvents(0);
       }
     } catch (error) {
-      console.log("error",error);
+      console.log(error);
     }
   }
 
@@ -160,11 +162,11 @@ const AdminPage = () => {
       if(Array.isArray(data.notices)){
         setNotices(data.notices.length);
       }else{
-        console.log("data.event is not an array");
+        ("data.event is not an array");
         setNotices(0);
       }
     } catch (error) {
-      console.log("error",error);
+      console.log(error);
     }
   }
 
@@ -184,6 +186,16 @@ const AdminPage = () => {
 
   return (
     <>
+    {loading && (
+        <div className="w-full max-w-md mx-auto px-4 py-5 mt-5 vh-100">
+            <DotLottieReact
+            src="https://lottie.host/941f2d8d-bbd1-48b3-ad98-b7c753ad96ca/7r1WsKpxoB.lottie"
+            loop
+            autoplay
+            />
+        </div>
+        )}
+      {!loading && <>
       {!society && (
         <div className="d-flex justify-content-center align-items-center vh-100">
           <div className="card text-center border-0">
@@ -299,13 +311,14 @@ const AdminPage = () => {
           </div>
         </div>
       )}
-      <button type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Open modal for @mdo</button>
-      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">Create Society</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </>}
+      <button type="button" className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Open modal for @mdo</button>
+      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel">Create Society</h1>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
               <form onSubmit={createSociety}>

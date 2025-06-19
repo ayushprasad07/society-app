@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 // import 'react-toastify/dist/ReactToastify.css'; 
 import { useNavigate } from 'react-router';
 
-const UserSignUp = () => {
+const UserSignUp = (props) => {
     const [credentials, setCredentials] = useState({ name: "", email: "", password: "", gender: "", society: "" });
     const [file, setFile] = useState(null);
     const [societies, setSocieties] = useState(null);
@@ -55,6 +55,7 @@ const UserSignUp = () => {
     };
 
     const handleSubmit = async (e) => {
+        props.setProgress(10);
         e.preventDefault();
         try {
             const URL = "http://localhost:4000/api/v1/user/signUp";
@@ -65,12 +66,12 @@ const UserSignUp = () => {
             if (file) {
                 formData.append("userImage", file);
             }
-
+            props.setProgress(40);
             const response = await fetch(URL, {
                 method: "POST",
                 body: formData
             });
-
+            props.setProgress(70);
             const data = await response.json();
             console.log("Signup response:", data);
 
@@ -79,13 +80,16 @@ const UserSignUp = () => {
                 localStorage.setItem('token', data.authToken);
                 localStorage.setItem('userId', data.user._id);
                 toast.success(data.message || "Account created successfully!");
+                props.setProgress(100);
                 navigator("/user-page");
             } else {
+                props.setProgress(100);
                 toast.error(data.message || "Signup failed");
             }
 
         } catch (error) {
             console.log("error", error);
+            props.setProgress(100);
             toast.error("Something went wrong. Please try again.");
         }
     }

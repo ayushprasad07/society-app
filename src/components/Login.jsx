@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 
 
 
-const Login = () => {
+const Login = (props) => {
     const [credentials,setCredentials] = useState({email:"",password:"",type:""});
 
     const navigator = useNavigate();
@@ -17,9 +17,11 @@ const Login = () => {
     const handleSubmit = async(e)=>{
         e.preventDefault();
         console.log(credentials);
+        props.setProgress(10);
         const {email,password,type} = credentials;
         try {
             const URL = `http://localhost:4000/api/v1/${type}/login`
+            props.setProgress(40);
             const response = await fetch(URL,{
                 method:"POST",
                 headers:{
@@ -31,17 +33,20 @@ const Login = () => {
                 })
             });
             const json = await response.json();
+            props.setProgress(70);
             if(response.ok){
                 localStorage.setItem('token',json.authToken);
                 const decodedToken = jwtDecode(json.authToken);
                 console.log("decoded token : ",decodedToken);
                 if(type==='admin'){
+                    props.setProgress(100);
                     localStorage.setItem('adminId',decodedToken.admins.id);
                     toast.success(json.message);
                     navigator('/admin-page');
                     
                 }else{
                     localStorage.setItem('userId',decodedToken.users.id);
+                    props.setProgress(100);
                     if(json.message==="Your account is pending approval by admin."){
                         toast.error(json.message);
                     }else{
@@ -51,6 +56,7 @@ const Login = () => {
                 }
             }
         } catch (error) {
+            props.setProgress(100);
             console.log("error",error)
         }
     }

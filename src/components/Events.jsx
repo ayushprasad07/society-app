@@ -2,17 +2,19 @@ import React, { useEffect, useState } from 'react'
 import Footer from './Footer';
 import noEvent from '../image/No-events.png'
 import societyEvent from '../image/society-event.jpg'
-import './Event.css'
+import './Event.css';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
-const Events = () => {
+
+const Events = (props) => {
   const [events,setEvents] = useState([]);
   const [eventInfo,setEventInfo] = useState({title:"",content:"",venue:"",eventDate:"",organizedBy:""});
-  const [file,setFile] = useState(null)
+  const [file,setFile] = useState(null);
+  const [loading,setLoading] = useState(true);
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(eventInfo);
     
     const { title, content, venue, eventDate, organizedBy } = eventInfo;
     const formData = new FormData();
@@ -41,7 +43,8 @@ const Events = () => {
 
       if (response.ok) {
         setEvents((prevEvents) => [...prevEvents, data.event]); 
-        console.log("event created successfully",data)
+        props.setRecentEvent(data.event);
+        localStorage.setItem('recentEvent',JSON.stringify(data.event));
         setEventInfo({
           title: "",
           content: "",
@@ -72,6 +75,7 @@ const Events = () => {
 
   const getEvents = async()=>{
     try {
+      if(localStorage.getItem('adminId')){
             const URL = "http://localhost:4000/api/v1/admin/get-events";
             const response = await fetch(URL,{
                 method:"GET",
@@ -85,13 +89,36 @@ const Events = () => {
                const sortedEvents = data.event.sort(
                     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
                 );
+                props.setRecentEvent(sortedEvents[0]);
+                localStorage.setItem('recentEvent',JSON.stringify(sortedEvents[0]));
+                setLoading(false);
                 setEvents(sortedEvents);
             }else{
-                console.log("data.notices is not an array");
                 setEvents([]);
             }
+      }else{
+            const URL = "http://localhost:4000/api/v1/user/get-events";
+            const response = await fetch(URL,{
+                method:"GET",
+                headers: {
+                "Content-Type": "application/json",
+                "auth-token": localStorage.getItem("token"),
+                },
+            })
+            const data = await response.json();
+            if(Array.isArray(data.event)){
+               const sortedEvents = data.event.sort(
+                    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+                );
+                setLoading(false);
+                setEvents(sortedEvents);
+                props.setRecentEvent(sortedEvents[0]);
+                localStorage.setItem('recentEvent',JSON.stringify(sortedEvents[0]));
+            }else{
+                setEvents([]);
+            }
+      }
         } catch (error) {
-            console.log("error",error);
         }
   }
 
@@ -101,7 +128,16 @@ const Events = () => {
 
   return (
     <>
-        <main className="container py-5 mt-5" style={{ minHeight: "100vh" }}>
+          {loading && (
+            <div className="w-full max-w-md mx-auto px-4 py-5 mt-5 vh-100">
+                <DotLottieReact
+                src="https://lottie.host/941f2d8d-bbd1-48b3-ad98-b7c753ad96ca/7r1WsKpxoB.lottie"
+                loop
+                autoplay
+                />
+            </div>
+          )}
+        {!loading && <main className="container py-5 mt-5" style={{ minHeight: "100vh" }}>
             
             <div>
                 <h1>Events</h1>
@@ -115,7 +151,12 @@ const Events = () => {
                 {events.map((event)=>{
                     return (
                         <div key={event._id} className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 my-3">
-                          <div className="card h-100 border-bottom border-4 border-primary border-0 event-card" key={event._id} style={{boxShadow:"0px 5px 10px grey",cursor:"pointer"}}>
+                          <div className="card h-100 border-bottom border-4 border-primary border-0 event-card" data-aos="fade-up" data-aos-delay={ 100} key={event._id} style={{
+                            background: 'white',
+                            boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+                            textDecoration: 'none',
+                            cursor:"pointer"
+                          }}>
                             <img 
                               src={event?.eventImage || societyEvent} 
                               className="card-img-top img-fluid" 
@@ -144,7 +185,7 @@ const Events = () => {
                 })}
               </div>
             </div>
-        </main>
+        </main>}
         <div>
             <div
                 className="position-fixed bottom-0 end-0 p-3"
@@ -154,17 +195,19 @@ const Events = () => {
                 maxWidth: '250px',
                 }}
             >
-                <div
-                className="mb-2 bg-transparent  show border-0 text-center"
-                role="alert"
-                aria-live="assertive"
-                aria-atomic="true"
-                data-bs-autohide="false"
-                >
-                <div className="toast-body border-0">
-                    <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"  className="btn btn-primary rounded-circle "><i className="fa-solid fa-plus"></i></button>
-                </div>
-                </div>
+                {localStorage.getItem('adminId') &&
+                  <div
+                  className="mb-2 bg-transparent  show border-0 text-center"
+                  role="alert"
+                  aria-live="assertive"
+                  aria-atomic="true"
+                  data-bs-autohide="false"
+                  >
+                    <div className="toast-body border-0">
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"  className="btn btn-primary rounded-circle "><i className="fa-solid fa-plus"></i></button>
+                    </div>
+                  </div>
+                }
                 <div
                 className="toast show shadow bg-white my-2"
                 role="alert"

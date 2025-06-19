@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import noSociety from '../image/No-society.png';
 import noNotice from '../image/No notice.png'
 import Footer from './Footer';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
-const Notices = () => {
+const Notices = (props) => {
     const [notices,setNotices] = useState([]);
     const [noticeInfo,setNoticeInfo] = useState({type:"",title:"",content:""});
+    const [loading,setLoading] = useState(true);
 
     const handleChange = (e)=>{
         setNoticeInfo({...noticeInfo,[e.target.name]:e.target.value});
@@ -13,10 +14,11 @@ const Notices = () => {
     
     const handleSubmit = async (e)=>{
         e.preventDefault();
-        console.log(noticeInfo);
         try {
+            props.setProgress(10);
             const URL = "http://localhost:4000/api/v1/admin/create-notice";
             const {type,title,content} = noticeInfo;
+            props.setProgress(40);
             const response = await fetch(URL,{
                 method:"POST",
                 headers: {
@@ -29,25 +31,29 @@ const Notices = () => {
                     content
                 })
             })
+            props.setProgress(70);
             const data = await response.json();
             if (response.ok) {
                 // Option 1: Add the new notice to state immediately
-                setNotices(prev => [data.notice, ...prev]);  // assuming `data.notice` is the new notice
+                setNotices(prev => [data.notice, ...prev]);
+                props.setRecentNotice(data.notice);
+                localStorage.setItem("recentNotice", JSON.stringify(data.notice));
+                props.setProgress(100);
                 setNoticeInfo({type: "", title: "", content: ""}); // reset form
-                console.log("Notice created successfully:", data);
                 // Optionally, close the modal
                 const modalEl = document.getElementById("exampleModal");
                 const modal = bootstrap.Modal.getInstance(modalEl);
                 modal.hide();
             }
         } catch (error) {
-            console.log("error : ",error);
+            props.setProgress(100);
         }
     }
 
     const getNotices = async()=>{
         try {
             if(localStorage.getItem('adminId')){
+                props.setProgress(10);
                 const URL = "http://localhost:4000/api/v1/admin/get-notice";
                 const response = await fetch(URL,{
                     method:"GET",
@@ -56,18 +62,24 @@ const Notices = () => {
                     "auth-token": localStorage.getItem("token"),
                     },
                 })
+                props.setProgress(40);
                 const data = await response.json();
+                props.setProgress(70);
                 if(Array.isArray(data.notices)){
                 const sortedNotices = data.notices.sort(
                         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
                     );
                     setNotices(sortedNotices);
+                    props.setProgress(100);
+                    setLoading(false);
                 }else{
-                    console.log("data.notices is not an array");
                     setNotices([]);
+                    props.setProgress(100);
                 }
             }else{
+                props.setProgress(10);
                 const URL = "http://localhost:4000/api/v1/user/get-notices";
+                props.setProgress(40);
                 const response = await fetch(URL,{
                     method:"GET",
                     headers: {
@@ -75,19 +87,24 @@ const Notices = () => {
                     "auth-token": localStorage.getItem("token"),
                     },
                 })
+                props.setProgress(70);
                 const data = await response.json();
                 if(Array.isArray(data.notice)){
                 const sortedNotices = data.notice.sort(
                         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
                     );
                     setNotices(sortedNotices);
+                    props.setRecentNotice(sortedNotices[0]);
+                    localStorage.setItem("recentNotice", JSON.stringify(sortedNotices[0]));
+                    props.setProgress(100);
+                     setLoading(false)
                 }else{
-                    console.log("data.notices is not an array");
                     setNotices([]);
+                    props.setProgress(100);
                 }
             }
         } catch (error) {
-            console.log("error",error);
+            props.setProgress(100);
         }
     }
 
@@ -97,6 +114,18 @@ const Notices = () => {
 
   return (
     <>
+        
+        {loading && (
+        <div className="w-full max-w-md mx-auto px-4 py-5 mt-5 vh-100">
+            <DotLottieReact
+            src="https://lottie.host/941f2d8d-bbd1-48b3-ad98-b7c753ad96ca/7r1WsKpxoB.lottie"
+            loop
+            autoplay
+            />
+        </div>
+        )}
+
+        {!loading && 
         <div className='container py-5 mt-5' style={{ minHeight: "100vh" }}>
             
             <div className="card border-0 p-4 event-card" style={{
@@ -115,7 +144,7 @@ const Notices = () => {
                 }
                 {notices.map((notice)=>{
                     return (
-                        <div className="card border-start border-4 border-primary my-3 border-0 event-card" key={notice._id} style={{boxShadow:"0px 5px 10px grey",cursor:"pointer"}}>
+                        <div className="card border-start border-4 border-primary my-3 border-0 event-card" data-aos="fade-up" data-aos-delay={ 100}  key={notice._id} style={{boxShadow:"0px 5px 10px grey",cursor:"pointer"}}>
                             <div className="card-header">
                             {notice.type.charAt(0).toUpperCase() + notice.type.slice(1)}
                             </div>
@@ -129,6 +158,7 @@ const Notices = () => {
                 })}
             </div>
         </div>
+        }
         <div>
             <div
                 className="position-fixed bottom-0 end-0 p-3"
