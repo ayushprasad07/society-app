@@ -11,6 +11,7 @@ const path = require('path');
 const Notice = require('../models/Notice');
 const Event = require('../models/Event');
 const fetchUser = require('../middleware/fetchUser');
+const MarketPlace = require('../models/MarketPlace');
 
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
@@ -159,6 +160,101 @@ router.get('/get-user/:id',fetchUser,async(req,res)=>{
         return res.status(500).json({message:"Internal Server error"});
     }
 })
+
+//ROUTE 6 : Post a item to sell '/sell-item'
+router.post('/sell-item',upload.single('itemImage'),fetchUser,async(req,res)=>{
+  try {
+    const {title,description,price,venue,phone} = req.body;
+    const userId = req.user.id;
+    const user = await User.findById(userId);
+
+    if(!req.file) return res.status(400).json({message:"Upload the image"});
+
+    const localFilePath = req.file.path;
+    const itemImageUpload = await uploadOnCloud(localFilePath);
+    fs.unlinkSync(localFilePath);
+
+    const marketPlace = await MarketPlace.create({
+      userId: userId,
+      type:"sell",
+      title,
+      itemImage:itemImageUpload.secure_url,
+      description,
+      price,
+      venue,
+      phone,
+      society: user.society
+    });
+
+    res.status(200).json({message:"Request is send for aproval", marketPlace});
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error", error: error.message });
+  }
+})
+
+//ROUTER 7 : get all items to get all the items '/get-items'
+router.get('/get-items',fetchUser,async(req,res)=>{
+  try {
+    const userId = req.user.id;
+    const user = await User.findById(userId);
+    const marketPlace = await MarketPlace.find({society:user.society,userId: { $ne: userId },approved:true,isHeld:false});
+    res.status(200).json({message:"fetched successfully",marketPlace});
+  } catch (error) {
+    return res.status(500).json({message:"Internal Server error"});
+  }
+})
+
+//ROUTE 8 : get the details of the person who has clicked buy button '/buy/:id' TODO
+router.get('/buy/:id/:itemId', fetchUser, async (req, res) => {
+  try {
+    const interestedUserId = req.params.id;
+    const itemId = req.params.itemId;
+
+    const interestedUser = await User.findById(interestedUserId);
+    const marketPlace = await MarketPlace.findById(itemId);
+
+    if (!interestedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (!marketPlace) {
+      return res.status(404).json({ message: "Item not found" });
+    }
+
+    marketPlace.interestedUsers = { user: interestedUserId };
+    marketPlace.isHeld = true;
+    marketPlace.inCart = true;
+    await marketPlace.save();
+    await marketPlace.populate('interestedUsers.user');
+
+    res.status(200).json({ marketPlace });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+//ROUTE 9 : Get all the itema in teh cart.
+router.get('/cart', fetchUser, async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const items = await MarketPlace.find({
+      'interestedUsers.user': userId,       
+      userId: { $ne: userId },              
+    })
+    .populate('userId') 
+    .populate('interestedUsers.user'); 
+
+    res.status(200).json({ message: "Items fetched successfully", items });
+
+  } catch (error) {
+    console.error("Error fetching cart items:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+
 
 
 module.exports = router

@@ -4,6 +4,7 @@ import logo from '../image/CommunityHub logo.png'
 import noImage from '../image/default.jpg'
 import { useNavigate } from 'react-router'
 import './AdminSignUp.css'
+import { toast } from 'react-toastify'
 
 const AdminSignUp = (props) => {
     const [credentials,setCredentials] = useState({name:"",email:"",password:"",gender:""})
@@ -34,10 +35,14 @@ const AdminSignUp = (props) => {
             const json = await response.json();
             props.setProgress(70);
             if(response.ok){
+                toast.success(json.message);
                 localStorage.setItem('token',json.authToken);
                 localStorage.setItem('adminId',json.admin._id);
                 props.setProgress(100);
                 navigator('/admin-page');
+            }else{
+                toast.error(json.message);
+                props.setProgress(100);
             }
         } catch (error) {
             props.setProgress(100);

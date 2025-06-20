@@ -54,6 +54,9 @@ const Login = (props) => {
                         navigator('/user-page');
                     }
                 }
+            }else{
+                toast.error(json.message);
+                props.setProgress(100);
             }
         } catch (error) {
             props.setProgress(100);

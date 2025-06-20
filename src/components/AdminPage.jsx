@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import noSociety from "../image/No-society.png";
-import { jwtDecode } from "jwt-decode";
 import Footer from "./Footer";
 import './AdminPage.css';
 import { Link } from "react-router";
