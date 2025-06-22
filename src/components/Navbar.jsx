@@ -60,9 +60,13 @@ const Navbar = () => {
           </ul>
 
           {isAuthenticated ? (
-            <button className="btn btn-primary mx-2" onClick={handleLogout}>
-              Logout <i className="fa-solid fa-right-from-bracket mx-2"></i>
-            </button>
+            <>
+              {localStorage.getItem('userId') && <Link to='/seller' className='mx-2' style={{textDecoration:"none",color:"black"}}>Sell</Link>}
+              {localStorage.getItem('userId') && <a href='/' style={{textDecoration:"none",color:"black"}}><i class="fa-solid fa-cart-shopping mx-2 fs-4"></i></a>}
+              <button className="btn btn-primary mx-2" onClick={handleLogout}>
+                Logout <i className="fa-solid fa-right-from-bracket mx-2"></i>
+              </button>
+            </>
           ) : (
             <>
               <Link className="btn btn-outline-primary mx-2" to="/login">

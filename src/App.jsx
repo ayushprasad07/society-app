@@ -17,6 +17,7 @@ import Events from './components/Events';
 import UserSignUp from './components/UserSignUp';
 import MarketPlace from './components/MarketPlace';
 import LoadingBar from "react-top-loading-bar";
+import SellerPage from './components/SellerPage';
 
 function App() {
   const [progress,setProgress] = useState(0);
@@ -70,6 +71,7 @@ function App() {
         <Route path='/notices' element={<Notices setProgress={updateProgress}  setRecentNotice={setRecentNotice}/>}/>
         <Route path='/events' element={<Events setRecentEvent={setRecentEvent}/>}/>
         <Route path='/market-place' element={<MarketPlace/>}/>
+        <Route path='/seller' element={<SellerPage/>}/>
       </Routes>
     </Router>
   );

@@ -77,14 +77,14 @@ const Login = (props) => {
                 <h1>Welcome back,</h1>
                 <hr/>
                 <form onSubmit={handleSubmit}>
-                    <div className="mb-3">
-                        <label htmlFor="email" className="form-label">Email address</label>
-                        <input type="email" className="form-control" placeholder='xyz@gmail.com' id="email" name='email' aria-describedby="emailHelp" onChange={handleChange}/>
+                    <div className="form-floating mb-3">
+                        <input type="email" className="form-control" id="email" name='email' placeholder="name@example.com" aria-describedby="emailHelp" onChange={handleChange}/>
+                        <label htmlFor="email" >Email address</label>
                         <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
                     </div>
-                    <div className="mb-3">
-                        <label htmlFor="password" className="form-label">Password</label>
-                        <input type="password" className="form-control" id="password" name='password' onChange={handleChange} />
+                    <div className="form-floating mb-3">
+                        <input type="password" className="form-control" id="password" placeholder='' name='password' onChange={handleChange} />
+                        <label htmlFor="password" >Password</label>
                     </div>
                     <div className="mb-3">
                         <label htmlFor="type" className="form-label d-block">Gender</label>

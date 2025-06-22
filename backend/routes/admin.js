@@ -13,6 +13,7 @@ const Society = require('../models/Society');
 const User = require('../models/User');
 const Notice = require('../models/Notice');
 const Event = require('../models/Event');
+const MarketPlace = require('../models/MarketPlace');
 const {sendConfirmationEmail} = require('../utils/email');
 const e = require('express');
 
@@ -290,6 +291,33 @@ router.get('/get-notice',fetchAdmin,async(req,res)=>{
   } catch (error) {
     console.log(error);
     res.status(500).json({message:"Internal Server error"});
+  }
+})
+
+//ROUTE 13 : GET all the request which is not approvved
+router.get('/get-items',fetchAdmin,async(req,res)=>{
+  try {
+    const adminId = req.admin.id;
+    const admin = await Admin.findById(adminId)
+    if(!admin) return res.status(400).json({message:"Admin not found"});
+    const items = await MarketPlace.find({society:admin.society,approved:false});
+    res.status(200).json({message:"Items fetched successfully",items});
+  } catch (error) {
+    res.status(500).json("Internal Server error");
+  }
+})
+
+//ROUTE 14 : Update the apprved to be true '/approve/:itemId'
+router.post('/approve/:itemId',fetchAdmin,async(req,res)=>{
+  try {
+    const itemId = req.params.itemId;
+    const item = await MarketPlace.findById(itemId);
+    item.approved = true;
+    item.save();
+    res.status(200).json({message:"itema pprove",item});
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({message:"Internal server error"})
   }
 })
 
