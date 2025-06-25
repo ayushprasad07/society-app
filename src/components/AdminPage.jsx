@@ -9,22 +9,22 @@ import adminRequest from '../image/admin-request.png'
 import adminResident from '../image/admin-resident.png'
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
-
 const AdminPage = () => {
   const [society, setSociety] = useState(null);
-  const [residents,setResidents] = useState(0);
-  const [pendinRequest,setPendingRequest] = useState(0);
-  const [events,setEvents] = useState(0);
-  const [notices,setNotices] = useState(0);
-  const [societyInfo,setSocietyInfo] = useState({name:"",address:"",city:"",state:"",pincode:""})
-  const [loading,setLoading] = useState(true);
+  const [residents, setResidents] = useState(0);
+  const [pendinRequest, setPendingRequest] = useState(0);
+  const [events, setEvents] = useState(0);
+  const [notices, setNotices] = useState(0);
+  const [societyInfo, setSocietyInfo] = useState({name:"", address:"", city:"", state:"", pincode:""})
+  const [loading, setLoading] = useState(true);
+  const [items,setItems] = useState([]);
 
-  const createSociety = async(e)=>{
+  const createSociety = async(e) => {
     e.preventDefault();
     try {
-      const{name,address,city,state,pincode} = societyInfo;
+      const{name, address, city, state, pincode} = societyInfo;
       const URL = "http://localhost:4000/api/v1/admin/create-society";
-      const response = await fetch(URL,{
+      const response = await fetch(URL, {
         method:"POST",
         headers: {
           "Content-Type": "application/json",
@@ -52,8 +52,8 @@ const AdminPage = () => {
     }
   }
 
-  const handleChange  = (e)=>{
-    setSocietyInfo({...societyInfo,[e.target.name]:e.target.value})
+  const handleChange = (e) => {
+    setSocietyInfo({...societyInfo, [e.target.name]: e.target.value})
   }
 
   const getAdmin = async () => {
@@ -69,20 +69,18 @@ const AdminPage = () => {
       });
       const data = await response.json();
       if (data.admin && data.admin.society) {
-        ("Your Society", data.admin.society);
         setSociety(data.admin.society);
         setLoading(false);
       }
-      (data);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const getResidents = async()=>{
+  const getResidents = async() => {
     try {
       const URL = "http://localhost:4000/api/v1/admin/viewAllRequests";
-      const response = await fetch(URL,{
+      const response = await fetch(URL, {
         method:"GET",
         headers: {
           "Content-Type": "application/json",
@@ -90,10 +88,9 @@ const AdminPage = () => {
         },
       })
       const data = await response.json();
-      ("Residents : ", data);
       if(Array.isArray(data.user)){
         setResidents(data.user.length);
-      }else{
+      } else {
         console.warn("data.user is not an array ");
         setResidents(0);
       }
@@ -102,10 +99,10 @@ const AdminPage = () => {
     }
   }
 
-  const getPendingRequest = async()=>{
+  const getPendingRequest = async() => {
     try {
       const URL = "http://localhost:4000/api/v1/admin/pending-request";
-      const response = await fetch(URL,{
+      const response = await fetch(URL, {
         method:"POST",
         headers: {
           "Content-Type": "application/json",
@@ -113,10 +110,9 @@ const AdminPage = () => {
         },
       })
       const data = await response.json();
-      ("Pending Requests : ", data);
       if(Array.isArray(data.pendingRequests)){
         setPendingRequest(data.pendingRequests.length);
-      }else{
+      } else {
         console.warn("data.user is not an array ");
         setPendingRequest(0);
       }
@@ -125,10 +121,10 @@ const AdminPage = () => {
     }
   }
 
-  const getEvents = async()=>{
+  const getEvents = async() => {
     try {
       const URL = "http://localhost:4000/api/v1/admin/get-events";
-      const response = await fetch(URL,{
+      const response = await fetch(URL, {
         method:"GET",
         headers: {
           "Content-Type": "application/json",
@@ -138,8 +134,7 @@ const AdminPage = () => {
       const data = await response.json();
       if(Array.isArray(data.event)){
         setEvents(data.event.length);
-      }else{
-        ("data.event is not an array");
+      } else {
         setEvents(0);
       }
     } catch (error) {
@@ -147,10 +142,10 @@ const AdminPage = () => {
     }
   }
 
-  const getNotices = async()=>{
+  const getNotices = async() => {
     try {
       const URL = "http://localhost:4000/api/v1/admin/get-notice";
-      const response = await fetch(URL,{
+      const response = await fetch(URL, {
         method:"GET",
         headers: {
           "Content-Type": "application/json",
@@ -160,14 +155,35 @@ const AdminPage = () => {
       const data = await response.json();
       if(Array.isArray(data.notices)){
         setNotices(data.notices.length);
-      }else{
-        ("data.event is not an array");
+      } else {
         setNotices(0);
       }
     } catch (error) {
       console.log(error);
     }
   }
+
+  const getItems  = async()=>{
+        try {
+        const URL = "http://localhost:4000/api/v1/admin/get-items";
+        const response = await fetch(URL, {
+            method:"GET",
+            headers: {
+            "Content-Type": "application/json",
+            "auth-token": localStorage.getItem("token"),
+            },
+        })
+        const data = await response.json();
+        if(Array.isArray(data.items)){
+            setItems(data.items.length);
+        } else {
+            setItems([]);
+        }
+        } catch (error) {
+            console.log(error);
+        }
+        
+    }
 
   useEffect(() => {
     getAdmin();
@@ -179,179 +195,422 @@ const AdminPage = () => {
       getPendingRequest();
       getEvents();
       getNotices();
+      getItems();
     }
   }, [society]);
 
-
-  return (
-    <>
-    {loading && (
-        <div className="w-full max-w-md mx-auto px-4 py-5 mt-5 vh-100">
-            <DotLottieReact
-            src="https://lottie.host/941f2d8d-bbd1-48b3-ad98-b7c753ad96ca/7r1WsKpxoB.lottie"
-            loop
-            autoplay
-            />
-        </div>
-        )}
-      {!loading && <>
-      {!society && (
-        <div className="d-flex justify-content-center align-items-center vh-100">
-          <div className="card text-center border-0">
-            <div className="card-body">
-              <h1 className="card-title mb-3">No Society Created Yet</h1>
-              <img className="img-fluid" src={noSociety} alt="No society" />
-              <p className="card-text text-muted my-3">
-                Get started by creating a new society.
-              </p>
-              <button data-bs-toggle="modal" data-bs-target="#exampleModal" className="btn btn-primary">
-                Create Society
-              </button>
+  const StatCard = ({ title, count, icon, link, color, bgColor }) => (
+    <div className="col-12 col-md-6 col-lg-6 mb-4">
+      <Link
+        to={link}
+        className="text-decoration-none"
+        style={{ cursor: "pointer" }}
+      >
+        <div 
+          className={`stat-card ${bgColor} rounded-4 shadow-sm h-100 position-relative overflow-hidden`}
+          style={{
+            minHeight: "160px",
+            transition: "all 0.3s ease",
+            border: "1px solid rgba(255,255,255,0.1)"
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-8px)";
+            e.currentTarget.style.boxShadow = "0 12px 40px rgba(0,0,0,0.15)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.1)";
+          }}
+        >
+          {/* Background Pattern */}
+          <div 
+            className="position-absolute top-0 end-0 opacity-25"
+            style={{
+              width: "100px",
+              height: "100px",
+              background: `radial-gradient(circle, ${color}40 0%, transparent 70%)`,
+              transform: "translate(20px, -20px)"
+            }}
+          />
+          
+          <div className="p-4 d-flex flex-column h-100">
+            <div className="d-flex align-items-center mb-3">
+              <div 
+                className="icon-wrapper me-3 d-flex align-items-center justify-content-center rounded-3"
+                style={{
+                  width: "50px",
+                  height: "50px",
+                  backgroundColor: `${color}20`,
+                  border: `2px solid ${color}30`
+                }}
+              >
+                <img 
+                  src={icon} 
+                  alt={title}
+                  style={{ 
+                    width: "24px", 
+                    height: "24px",
+                    filter: `hue-rotate(${color === '#3b82f6' ? '0deg' : color === '#10b981' ? '140deg' : color === '#f59e0b' ? '40deg' : '280deg'})`
+                  }} 
+                />
+              </div>
+              <div className="flex-grow-1">
+                <p className="text-muted mb-1 small fw-medium">{title}</p>
+                <h2 className="mb-0 fw-bold" style={{ color: color, fontSize: "2rem" }}>
+                  {count}
+                </h2>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
-      {society && (
-        <div className="d-flex justify-content-center align-items-center vh-100 my-5">
-          <div className="card border-0">
-            <div className="card-body">
-              <h1>Welcome Admin,</h1>
-              <p className="text-muted">
-                Here are the information about your Society,{" "}
-                <strong>{society.name}</strong>
-              </p>
-              <div className="row w-100 gx-3 gy-3 my-5">
-                <div className="col-12 col-md-6 col-sd-12">
-                  <Link
-                    to="/residents"
-                    className="btn btn-light border-start border-4 border-primary bg-white rounded shadow-sm p-3 text-start w-100 h-100 d-flex flex-column justify-content-between border-0"
-                    style={{ minHeight: "150px", cursor: "pointer", outline: "none" }}
-                  >
-                    <div className="d-flex">
-                      <div>
-                        <img src={adminResident} className="img-fluid mx-2" alt="events" style={{ maxWidth: "40px", height: "auto" }} />
-                      </div>
-                      <div>
-                        <p className="mb-2">Total Residents</p>
-                        <h1>{residents}</h1>
-                        
-                      </div>
-                    </div>
-                    <div className="text-end">
-                      <i className="fa-solid fa-arrow-right fs-5"></i>
-                    </div>
-                  </Link>
+            
+            <div className="mt-auto d-flex justify-content-between align-items-center">
+              <div className="progress-bar-container flex-grow-1 me-3">
+                <div 
+                  className="progress-bar rounded-pill"
+                  style={{
+                    height: "4px",
+                    backgroundColor: `${color}20`,
+                    position: "relative",
+                    overflow: "hidden"
+                  }}
+                >
+                  <div 
+                    className="progress-fill rounded-pill"
+                    style={{
+                      height: "100%",
+                      backgroundColor: color,
+                      width: `${Math.min(count * 10, 100)}%`,
+                      transition: "width 1s ease-in-out"
+                    }}
+                  />
                 </div>
-                <div className="col-12 col-md-6 col-sd-12">
-                  <Link
-                    to="/requests"
-                    className="btn border-start border-4 border-primary btn-light bg-white rounded shadow-sm p-3 text-start w-100 h-100 d-flex flex-column justify-content-between border-0"
-                    style={{ minHeight: "150px", cursor: "pointer", outline: "none" }}
-                  >
-                    <div className="d-flex">
-                      <div>
-                        <img src={adminRequest} className="img-fluid mx-2" alt="events" style={{ maxWidth: "40px", height: "auto" }} />
-                      </div>
-                      <div>
-                        <p className="mb-2">Pending Request</p>
-                        <h1>{pendinRequest}</h1>
-                        
-                      </div>
-                    </div>
-                    <div className="text-end">
-                      <i className="fa-solid fa-arrow-right fs-5"></i>
-                    </div>
-                  </Link>
-                </div>
-                <div className="col-12 col-md-6 col-sd-12">
-                  <Link
-                    to="/events"
-                    className="btn border-start border-4 border-primary btn-light bg-white rounded shadow-sm p-3 text-start w-100 h-100 d-flex flex-column justify-content-between border-0"
-                    style={{ minHeight: "150px", cursor: "pointer", outline: "none" }}
-                  >
-                    <div className="d-flex">
-                      <div>
-                        <img src={adminEvents} className="img-fluid mx-2" alt="events" style={{ maxWidth: "40px", height: "auto" }} />
-                      </div>
-                      <div>
-                        <p className="mb-2">Upcoming Events</p>
-                        <h1>{events}</h1>
-                        
-                      </div>
-                    </div>
-                    <div className="text-end">
-                      <i className="fa-solid fa-arrow-right fs-5"></i>
-                    </div>
-                  </Link>
-                </div>
-                <div className="col-12 col-md-6 col-sd-12">
-                  <Link
-                    to="/notices"
-                    className="btn border-start border-4 border-primary btn-light bg-white rounded shadow-sm p-3 text-start w-100 h-100 d-flex flex-column justify-content-between border-0"
-                    style={{ minHeight: "150px", cursor: "pointer", outline: "none" }}
-                  >
-                    <div className="d-flex">
-                      <div>
-                        <img src={adminNotice} className="img-fluid mx-2" alt="events" style={{ maxWidth: "40px", height: "auto" }} />
-                      </div>
-                      <div>
-                        <p className="mb-2">Recent Notices</p>
-                        <h1>{notices}</h1>
-                        
-                      </div>
-                    </div>
-                    <div className="text-end">
-                      <i className="fa-solid fa-arrow-right fs-5"></i>
-                    </div>
-                  </Link>
-                </div>
+              </div>
+              <div 
+                className="arrow-icon d-flex align-items-center justify-content-center rounded-circle"
+                style={{
+                  width: "32px",
+                  height: "32px",
+                  backgroundColor: `${color}15`,
+                  transition: "all 0.3s ease"
+                }}
+              >
+                <i 
+                  className="fas fa-arrow-right"
+                  style={{ 
+                    color: color,
+                    fontSize: "14px",
+                    transition: "transform 0.3s ease"
+                  }}
+                />
               </div>
             </div>
           </div>
         </div>
+      </Link>
+    </div>
+  );
+
+  return (
+    <>
+      <style jsx="true">{`
+        .no-society-container {
+          background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+          min-height: 100vh;
+        }
+        .create-society-card {
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .dashboard-header {
+          background: linear-gradient(135deg, #03045e 0%, #0096c7 100%);
+          color: white;
+          margin: -20px -20px 30px -20px;
+          padding: 30px 20px;
+          border-radius: 0 0 20px 20px;
+        }
+        .modal-content {
+          border-radius: 20px;
+          border: none;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        .modal-header {
+          background: linear-gradient(135deg, #03045e 0%, #0096c7 100%);
+          color: white;
+          border-radius: 20px 20px 0 0;
+          border-bottom: none;
+        }
+        .loading-container {
+          background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(70px); }
+          50% { transform: translateY(-50px); }
+        }
+      `}</style>
+
+      {loading && (
+        <div className="loading-container">
+          <div className="text-center">
+            <DotLottieReact
+              src="https://lottie.host/941f2d8d-bbd1-48b3-ad98-b7c753ad96ca/7r1WsKpxoB.lottie"
+              loop
+              autoplay
+              style={{ width: "300px", height: "300px" }}
+            />
+            <h3 className="mt-3 text-muted">Loading your dashboard...</h3>
+          </div>
+        </div>
       )}
-      </>}
-      <button type="button" className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Open modal for @mdo</button>
+
+      {!loading && (
+        <>
+          {!society && (
+            <div className="no-society-container d-flex justify-content-center align-items-center">
+              <div className="container">
+                <div className="row justify-content-center">
+                  <div className="col-12 col-md-8 col-lg-6">
+                    <div className="create-society-card text-center p-5 rounded-4 shadow-lg">
+                      <div className="mb-4">
+                        <div 
+                          className="d-inline-block p-4 rounded-circle mb-3"
+                          style={{ backgroundColor: "#667eea20" }}
+                        >
+                          <img 
+                            className="img-fluid" 
+                            src={noSociety} 
+                            alt="No society" 
+                            style={{ maxWidth: "120px", height: "auto" }}
+                          />
+                        </div>
+                      </div>
+                      <h1 className="display-6 fw-bold mb-3" style={{ color: "#667eea" }}>
+                        No Society Created Yet
+                      </h1>
+                      <p className="lead text-muted mb-4" style={{ fontSize: "1.1rem" }}>
+                        Get started by creating your first society and unlock the full potential of our management system.
+                      </p>
+                      <button 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#exampleModal" 
+                        className="btn btn-primary btn-lg px-5 py-3"
+                        style={{ fontSize: "1.1rem", fontWeight: "600" }}
+                      >
+                        <i className="fas fa-plus me-2"></i>
+                        Create Society
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {society && (
+            <div className="container-fluid px-4 py-5 mt-5" style={{ backgroundColor: "#f8fafc", minHeight: "100vh" }}>
+              <div className="row justify-content-center">
+                <div className="col-12 col-xl-10">
+                  <div className="card border-0 shadow-lg rounded-4 overflow-hidden">
+                    <div className="dashboard-header">
+                      <div className="position-absolute top-0 start-0 w-100 h-100" style={{ opacity: 0.1 }}>
+                        <div className="position-absolute rounded-circle" style={{
+                          width: '300px',
+                          height: '300px',
+                          background: 'white',
+                          top: '-150px',
+                          right: '-150px',
+                          animation: 'float 6s ease-in-out infinite'
+                        }}></div>
+                        <div className="position-absolute rounded-circle" style={{
+                          width: '200px',
+                          height: '200px',
+                          background: 'white',
+                          bottom: '-100px',
+                          left: '-100px',
+                          animation: 'float 8s ease-in-out infinite reverse'
+                        }}></div>
+                      </div>
+                      <div className="row align-items-center p-3">
+                        <div className="col-12 col-md-8">
+                          <h1 className="mb-2">
+                            Welcome Back, Admin! 
+                          </h1>
+                          <h3 className="society-name mb-0">
+                            Managing <strong>{society.name}</strong>
+                          </h3>
+                        </div>
+                        <div className="col-12 col-md-4 text-md-end mt-3 mt-md-0 my-3">
+                          <div className="d-flex flex-column">
+                            <small className="opacity-75">Today's Date</small>
+                            <strong>{new Date().toLocaleDateString('en-US', { 
+                              weekday: 'long', 
+                              year: 'numeric', 
+                              month: 'long', 
+                              day: 'numeric' 
+                            })}</strong>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="card-body p-5">
+                      <div className="row g-4">
+                        <StatCard
+                          title="Total Residents"
+                          count={residents}
+                          icon={adminResident}
+                          link="/residents"
+                          color="#3b82f6"
+                          bgColor="bg-white"
+                        />
+                        <StatCard
+                          title="Pending Requests"
+                          count={pendinRequest}
+                          icon={adminRequest}
+                          link="/requests"
+                          color="#ef4444"
+                          bgColor="bg-white"
+                        />
+                        <StatCard
+                          title="Upcoming Events"
+                          count={events}
+                          icon={adminEvents}
+                          link="/events"
+                          color="#10b981"
+                          bgColor="bg-white"
+                        />
+                        <StatCard
+                          title="Recent Notices"
+                          count={notices}
+                          icon={adminNotice}
+                          link="/notices"
+                          color="#f59e0b"
+                          bgColor="bg-white"
+                        />
+                        <StatCard
+                          title="Manage Market Place"
+                          count={items}
+                          icon={adminNotice}
+                          link="/admin-markte-place"
+                          color="#0096c7"
+                          bgColor="bg-white"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* Enhanced Modal */}
       <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog">
+        <div className="modal-dialog modal-lg modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
-              <h1 className="modal-title fs-5" id="exampleModalLabel">Create Society</h1>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <h1 className="modal-title fs-4 fw-bold" id="exampleModalLabel">
+                <i className="fas fa-building me-2"></i>
+                Create New Society
+              </h1>
+              <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div className="modal-body">
-              <form onSubmit={createSociety}>
-                <div className="mb-3">
-                  <label htmlFor="name" className="col-form-label">Society Name:</label>
-                  <input type="text" className="form-control" id="name" name="name" onChange={handleChange}/>
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="address" className="col-form-label">Address:</label>
-                  <input type="text" className="form-control" id="address" name="address" onChange={handleChange} />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="city" className="col-form-label">City:</label>
-                  <input type="text" className="form-control" id="city" name="city" onChange={handleChange}/>
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="state" className="col-form-label">State :</label>
-                  <input type="text" className="form-control" id="state" name="state" onChange={handleChange}/>
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="pincode" className="col-form-label">Pincode :</label>
-                  <input type="number" className="form-control" id="pincode" name="pincode" onChange={handleChange}/>
+            <div className="modal-body p-4">
+              <div>
+                <div className="row g-3">
+                  <div className="col-12">
+                    <label htmlFor="name" className="form-label fw-semibold">
+                      <i className="fas fa-building me-2 text-primary"></i>
+                      Society Name
+                    </label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      id="name" 
+                      name="name" 
+                      onChange={handleChange}
+                      placeholder="Enter society name"
+                      value={societyInfo.name}
+                    />
+                  </div>
+                  <div className="col-12">
+                    <label htmlFor="address" className="form-label fw-semibold">
+                      <i className="fas fa-map-marker-alt me-2 text-primary"></i>
+                      Address
+                    </label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      id="address" 
+                      name="address" 
+                      onChange={handleChange}
+                      placeholder="Enter full address"
+                      value={societyInfo.address}
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <label htmlFor="city" className="form-label fw-semibold">
+                      <i className="fas fa-city me-2 text-primary"></i>
+                      City
+                    </label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      id="city" 
+                      name="city" 
+                      onChange={handleChange}
+                      placeholder="Enter city"
+                      value={societyInfo.city}
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <label htmlFor="state" className="form-label fw-semibold">
+                      <i className="fas fa-map me-2 text-primary"></i>
+                      State
+                    </label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      id="state" 
+                      name="state" 
+                      onChange={handleChange}
+                      placeholder="Enter state"
+                      value={societyInfo.state}
+                    />
+                  </div>
+                  <div className="col-12">
+                    <label htmlFor="pincode" className="form-label fw-semibold">
+                      <i className="fas fa-mail-bulk me-2 text-primary"></i>
+                      Pincode
+                    </label>
+                    <input 
+                      type="number" 
+                      className="form-control" 
+                      id="pincode" 
+                      name="pincode" 
+                      onChange={handleChange}
+                      placeholder="Enter pincode"
+                      value={societyInfo.pincode}
+                    />
+                  </div>
                 </div>
 
-                {/* Modal footer inside the form */}
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="submit" className="btn btn-primary">Create Society</button>
+                <div className="modal-footer border-0 pt-4">
+                  <button type="button" className="btn btn-secondary px-4 py-2" data-bs-dismiss="modal">
+                    <i className="fas fa-times me-2"></i>
+                    Cancel
+                  </button>
+                  </div>
                 </div>
-              </form>
             </div>
           </div>
         </div>
       </div>
+
       <Footer />
     </>
   );

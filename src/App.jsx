@@ -18,6 +18,7 @@ import UserSignUp from './components/UserSignUp';
 import MarketPlace from './components/MarketPlace';
 import LoadingBar from "react-top-loading-bar";
 import SellerPage from './components/SellerPage';
+import AdminMarketPlace from './components/AdminMarketPlace';
 
 function App() {
   const [progress,setProgress] = useState(0);
@@ -72,6 +73,7 @@ function App() {
         <Route path='/events' element={<Events setRecentEvent={setRecentEvent}/>}/>
         <Route path='/market-place' element={<MarketPlace/>}/>
         <Route path='/seller' element={<SellerPage/>}/>
+        <Route path='/admin-markte-place' element={<AdminMarketPlace/>}/>
       </Routes>
     </Router>
   );

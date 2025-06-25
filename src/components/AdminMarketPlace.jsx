@@ -1,66 +1,68 @@
-import React, {useState, useEffect } from 'react'
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import React, { useEffect, useState } from 'react';
+import noItems from '../image/no-items.png';
 import Footer from './Footer';
 import { toast } from 'react-toastify';
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
-
-const MarketPlace = () => {
-  const [items,setItems] = useState([]);
+const AdminMarketPlace = () => {
+  const [items, setItems] = useState([]);
   const [loading,setLoading] = useState(true);
-  
 
-  const handleCartClick = async(itemId)=>{
+  const getItems = async () => {
     try {
-      const userId = localStorage.getItem('userId');
-      const URL = `http://localhost:4000/api/v1/user/add-to-cart/${userId}/${itemId}`;
-      const response = await fetch(URL,{
-        method:"GET",
-        headers:{
-          "auth-token":localStorage.getItem('token'),
-        }
-      })
+      const URL = "http://localhost:4000/api/v1/admin/get-items";
+      const response = await fetch(URL, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      });
       const data = await response.json();
-      if(response.ok){
-        toast.success(data.message)
-      }else{
+      if (Array.isArray(data.items)) {
+        setItems(data.items);
+      } else {
+        setItems([]);
+      }
+    } catch (error) {
+        console.log(error);
+    }finally{
+        setLoading(false);
+    }
+  };
+
+  const handleApprove = async (itemId) => {
+    try {
+        setLoading(true);
+      const URL = `http://localhost:4000/api/v1/admin/approve/${itemId}`;
+      const response = await fetch(URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      });
+      const data = await response.json();
+      if (response.ok) {
+        toast.success(data.message);
+        getItems();
+      } else {
         toast.error(data.message);
       }
     } catch (error) {
-      console.log(error);
+        console.log(error);
+    }finally{
+        setLoading(false);
     }
-  }
+  };
 
-  const getItems = async()=>{
-    try {
-      const URL = "http://localhost:4000/api/v1/user/get-items";
-      const response = await fetch(URL,{
-        method:"GET",
-        headers:{
-          "auth-token":localStorage.getItem('token')
-        }
-      })
-      const data = await response.json();
-      console.log(data);
-      if(response.ok){
-        setItems(data.marketPlace);
-        setLoading(false)
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  useEffect(()=>{
+  useEffect(() => {
     getItems();
-  },[]);
-
-  useEffect(()=>{
-    console.log(items)
-  },[items]);
+  }, []);
 
   return (
     <>
-      <style jsx>{`
+        <style jsx>{`
         @keyframes float {
           0%, 100% { transform: translateY(70px); }
           50% { transform: translateY(-50px); }
@@ -128,14 +130,14 @@ const MarketPlace = () => {
                     <div className="container text-center py-5 mt-5">
                         <h1 className="hero-title">
                             <i className="fas fa-shopping-bag me-3"></i>
-                            Items in your community
+                            Items
                         </h1>
                         <p className="hero-subtitle">
-                            Discover great deals on items listed by your neighbors. Buy and connect within your society!
+                            Approve the items to sell for the Marketplace
                         </p>
                     </div>
                 </div>
-                <div className='container' >
+                <div className='container py-5 mt-5 mb-5' >
                     {items.length === 0 ? (
                         <div className="empty-state text-center">
                             <img src={noItems} alt='No notices available' className='img-fluid' style={{ maxHeight: "300px", objectFit: "cover" }}/>
@@ -170,6 +172,7 @@ const MarketPlace = () => {
                                                 <h5 className="card-title  mb-0">{item.price} ₹</h5>
                                             </div>
                                             <p className="card-text text-muted mt-2">{item.description}</p>
+                                            <button className='btn btn-outline-primary' onClick={()=>{handleApprove(item._id)}}>Approve</button>
                                             </div>
                                         </div>
                                     </div>
@@ -182,8 +185,9 @@ const MarketPlace = () => {
         }
         <Footer/>
     </>
-   
-  )
-}
+  );
+};
 
-export default MarketPlace
+
+
+export default AdminMarketPlace;
