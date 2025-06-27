@@ -1,10 +1,11 @@
-import React, {useState, useEffect } from 'react'
+import  {useState, useEffect } from 'react'
 import Footer from './Footer';
 import { toast } from 'react-toastify';
+import noItems from '../image/no-items.png'
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 
-const MarketPlace = () => {
+const MarketPlace = (props) => {
   const [items,setItems] = useState([]);
   const [loading,setLoading] = useState(true);
   
@@ -30,25 +31,35 @@ const MarketPlace = () => {
     }
   }
 
-  const getItems = async()=>{
+  const getItems = async () => {
     try {
       const URL = "http://localhost:4000/api/v1/user/get-items";
-      const response = await fetch(URL,{
-        method:"GET",
-        headers:{
-          "auth-token":localStorage.getItem('token')
-        }
-      })
+      const response = await fetch(URL, {
+        method: "GET",
+        headers: {
+          "auth-token": localStorage.getItem("token"),
+        },
+      });
+
       const data = await response.json();
       console.log(data);
-      if(response.ok){
-        setItems(data.marketPlace);
-        setLoading(false)
+
+      if (response.ok && Array.isArray(data.marketPlace)) {
+        const sortedItems = data.marketPlace.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        setItems(sortedItems);
+
+        // if (sortedItems) {
+          props.setRecentItem(sortedItems[0]);
+          localStorage.setItem("recentItem", JSON.stringify(sortedItems[0]));
+        // }
       }
     } catch (error) {
-      console.log(error);
+      console.log("Error fetching items:", error);
+    }finally{
+       setLoading(false);
     }
-  }
+  };
+
 
   useEffect(()=>{
     getItems();
@@ -170,6 +181,10 @@ const MarketPlace = () => {
                                                 <h5 className="card-title  mb-0">{item.price} ₹</h5>
                                             </div>
                                             <p className="card-text text-muted mt-2">{item.description}</p>
+                                            <div>
+                                              <button className='btn btn-primary mx-2 my-2'>Interested</button>
+                                              <button className='btn btn-outline-primary mx-2 my-2' onClick={()=>{handleCartClick(item._id)}}>Cart</button>
+                                            </div>
                                             </div>
                                         </div>
                                     </div>

@@ -30,6 +30,10 @@ function App() {
     const stored = localStorage.getItem('recentEvent');
     return stored ? JSON.parse(stored):{};
   })
+  const [recentItem, setRecentItem] = useState(()=>{
+    const stored = localStorage.getItem('recentItem');
+    return stored ? JSON.parse(stored):{};
+  })
 
 
   const updateProgress = (progress)=>{
@@ -42,7 +46,6 @@ function App() {
       once: true
     });
   }, []);
-
 
   return (
     <Router>
@@ -65,13 +68,13 @@ function App() {
         <Route path='/admin-sign-up' element={<AdminSignUp setProgress={updateProgress}/>}/>
         <Route path='/user-sign-up' element={<UserSignUp setProgress={updateProgress}/>}/>
         <Route path='/admin-page' element={<AdminPage/>}/>
-        <Route path='/user-page' element={<UserPage recentNotice={recentNotice} recentEvent={recentEvent} />}/>
+        <Route path='/user-page' element={<UserPage recentNotice={recentNotice} recentEvent={recentEvent} recentItem={recentItem} />}/>
         <Route path='/login' element={<Login setProgress={updateProgress}/>}/>
         <Route path='/residents' element={<Residents/>}/>
         <Route path='/requests' element={<Requests/>}/>
         <Route path='/notices' element={<Notices setProgress={updateProgress}  setRecentNotice={setRecentNotice}/>}/>
         <Route path='/events' element={<Events setRecentEvent={setRecentEvent}/>}/>
-        <Route path='/market-place' element={<MarketPlace/>}/>
+        <Route path='/market-place' element={<MarketPlace setRecentItem={setRecentItem}/>}/>
         <Route path='/seller' element={<SellerPage/>}/>
         <Route path='/admin-markte-place' element={<AdminMarketPlace/>}/>
       </Routes>

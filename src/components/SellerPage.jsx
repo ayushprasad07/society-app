@@ -16,13 +16,12 @@ const SellerPage = () => {
             }
         })
         const data = await response.json();
-        console.log(data);
         if(response.ok){
             setItems(data.items);
             setLoading(false)
         }
         } catch (error) {
-        console.log(error);
+            console.log(error);
         }
     }
 

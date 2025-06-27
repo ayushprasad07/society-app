@@ -33,7 +33,7 @@ const UserPage = (props) => {
 
   return (
     <>
-      <div className="position-relative overflow-hidden" style={{ 
+      <div className="position-relative overflow-hidden" style={{
         background: 'linear-gradient(135deg, #03045e 0%, #0096c7 100%)',
         paddingTop: '120px',
         paddingBottom: '80px'
@@ -56,7 +56,7 @@ const UserPage = (props) => {
             animation: 'float 8s ease-in-out infinite reverse'
           }}></div>
         </div>
-        
+
         <div className="container position-relative">
           <div className="row align-items-center">
             <div className="col-lg-8">
@@ -66,17 +66,17 @@ const UserPage = (props) => {
                     src={user.userImage}
                     alt="userImage"
                     className="img-fluid rounded-circle border border-4 border-white shadow-lg"
-                    style={{ 
-                      width: '120px', 
-                      height: '120px', 
+                    style={{
+                      width: '120px',
+                      height: '120px',
                       objectFit: 'cover',
                       transition: 'transform 0.3s ease'
                     }}
                     onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
                     onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
                   />
-                  <div className="position-absolute bottom-0 end-0 bg-success rounded-circle border border-3 border-white" 
-                       style={{ width: '25px', height: '25px' }}></div>
+                  <div className="position-absolute bottom-0 end-0 bg-success rounded-circle border border-3 border-white"
+                    style={{ width: '25px', height: '25px' }}></div>
                 </div>
                 <div className="text-white">
                   <h1 className="display-5 fw-bold mb-2" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>
@@ -92,11 +92,11 @@ const UserPage = (props) => {
               <div className="text-white">
                 <div className="d-inline-block p-3 rounded-3" style={{ background: 'rgba(255,255,255,0.1)' }}>
                   <i className="fa-solid fa-calendar-days fs-4 mb-2 d-block"></i>
-                  <small className="d-block">{new Date().toLocaleDateString('en-US', { 
-                    weekday: 'long', 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
+                  <small className="d-block">{new Date().toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
                   })}</small>
                 </div>
               </div>
@@ -126,41 +126,41 @@ const UserPage = (props) => {
           <div className="card-body p-4">
             <div className="row g-4">
               {[
-                { 
-                  icon: 'fa-solid fa-scroll', 
-                  title: 'Announcements', 
+                {
+                  icon: 'fa-solid fa-scroll',
+                  title: 'Announcements',
                   subtitle: 'Latest updates',
                   color: '#8B5CF6',
                   gradient: 'linear-gradient(135deg, #8B5CF6, #A855F7)',
-                  link: '/notices' 
+                  link: '/notices'
                 },
-                { 
-                  icon: 'fa-solid fa-calendar-days', 
+                {
+                  icon: 'fa-solid fa-calendar-days',
                   title: 'Events',
                   subtitle: 'Upcoming activities',
                   color: '#EC4899',
                   gradient: 'linear-gradient(135deg, #EC4899, #F472B6)',
-                  link: '/events' 
+                  link: '/events'
                 },
-                { 
-                  icon: 'fa-solid fa-bag-shopping', 
+                {
+                  icon: 'fa-solid fa-bag-shopping',
                   title: 'Marketplace',
                   subtitle: 'Buy & sell items',
                   color: '#06B6D4',
                   gradient: 'linear-gradient(135deg, #06B6D4, #67E8F9)',
-                  link: '/market-place' 
+                  link: '/market-place'
                 },
-                { 
-                  icon: 'fa-solid fa-headset', 
+                {
+                  icon: 'fa-solid fa-headset',
                   title: 'Support',
                   subtitle: 'Get help anytime',
                   color: '#10B981',
                   gradient: 'linear-gradient(135deg, #10B981, #34D399)',
-                  link: '#' 
+                  link: '#'
                 }
               ].map((feature, index) => (
                 <div key={index} className="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay={index * 100}>
-                  <Link 
+                  <Link
                     to={feature.link}
                     className="card h-100 border-0 text-decoration-none position-relative overflow-hidden"
                     style={{
@@ -179,18 +179,17 @@ const UserPage = (props) => {
                       e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.08)';
                     }}
                   >
-                    {/* Gradient overlay */}
                     <div className="position-absolute top-0 start-0 w-100 h-100" style={{
                       background: `${feature.gradient}`,
                       opacity: 0,
                       transition: 'opacity 0.3s ease',
                       borderRadius: '20px'
-                    }} 
-                    onMouseEnter={(e) => e.target.style.opacity = '0.05'}
-                    onMouseLeave={(e) => e.target.style.opacity = '0'}></div>
-                    
+                    }}
+                      onMouseEnter={(e) => e.target.style.opacity = '0.05'}
+                      onMouseLeave={(e) => e.target.style.opacity = '0'}></div>
+
                     <div className="card-body p-4 text-center position-relative">
-                      <div 
+                      <div
                         className="rounded-circle d-inline-flex align-items-center justify-content-center mb-3 position-relative"
                         style={{
                           width: '80px',
@@ -229,21 +228,21 @@ const UserPage = (props) => {
             <div className='row'>
               <div className='col-12 col-md-4'>
                 <div className="card border-0 my-3" style={{
-                      borderRadius: '20px',
-                      transition: 'all 0.3s ease',
-                      background: 'white',
-                      boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
-                      textDecoration: 'none',
-                      cursor:"pointer"
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = 'translateY(-10px)';
-                      e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,0,0,0.15)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.1)';
-                    }}>
+                  borderRadius: '20px',
+                  transition: 'all 0.3s ease',
+                  background: 'white',
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+                  textDecoration: 'none',
+                  cursor: "pointer"
+                }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-10px)';
+                    e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,0,0,0.15)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.1)';
+                  }}>
                   <div className="card-header d-flex align-items-center gap-3 bg-transparent">
                     <div className="rounded-circle d-flex align-items-center justify-content-center" style={{
                       width: '40px',
@@ -260,27 +259,27 @@ const UserPage = (props) => {
                     <p className="card-text">{props.recentNotice?.content || "Nothing to show right now."}</p>
                   </div>
                   <div className="card-footer text-center border-0 bg-transparent">
-                    <Link to="/notices" style={{textDecoration:"none"}}>View All Notices <i className="fa-solid fa-angle-down"></i></Link>
+                    <Link to="/notices" style={{ textDecoration: "none" }}>View All Notices <i className="fa-solid fa-angle-down"></i></Link>
                   </div>
                 </div>
               </div>
               <div className='col-12 col-md-4'>
                 <div className="card border-0 my-3" style={{
-                      borderRadius: '20px',
-                      transition: 'all 0.3s ease',
-                      background: 'white',
-                      boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
-                      textDecoration: 'none',
-                      cursor:"pointer"
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = 'translateY(-10px)';
-                      e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,0,0,0.15)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.1)';
-                    }}>
+                  borderRadius: '20px',
+                  transition: 'all 0.3s ease',
+                  background: 'white',
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+                  textDecoration: 'none',
+                  cursor: "pointer"
+                }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-10px)';
+                    e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,0,0,0.15)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.1)';
+                  }}>
                   <div className="card-header d-flex align-items-center gap-3 bg-transparent">
                     <div className="rounded-circle d-flex align-items-center justify-content-center" style={{
                       width: '40px',
@@ -293,37 +292,37 @@ const UserPage = (props) => {
                     <h6 className="mb-0 fw-bold">Latest Event</h6>
                   </div>
                   <div className="card-body">
-                    <img 
-                      src={props.recentEvent.eventImage.length===0 ? societyEvent:props.recentEvent.eventImage} 
-                      className="card-img-top img-fluid" 
-                      alt="Event" 
-                      style={{ objectFit: "cover", height: "200px" }} 
+                    <img
+                      src={props.recentEvent.eventImage.length === 0 ? societyEvent : props.recentEvent.eventImage}
+                      className="card-img-top img-fluid"
+                      alt="Event"
+                      style={{ objectFit: "cover", height: "200px" }}
                     />
                     <h5 className="card-title my-2">{props.recentEvent.title || "No recent event"}</h5>
                     <p className="card-text">{props.recentEvent.content || "Nothing to show right now"}</p>
                   </div>
                   <div className="card-footer text-center border-0 bg-transparent">
-                    <Link to="/events" style={{textDecoration:"none"}}>View All Events <i className="fa-solid fa-angle-down"></i></Link>
+                    <Link to="/events" style={{ textDecoration: "none" }}>View All Events <i className="fa-solid fa-angle-down"></i></Link>
                   </div>
                 </div>
               </div>
               <div className='col-12 col-md-4'>
                 <div className="card border-0 my-3" style={{
-                      borderRadius: '20px',
-                      transition: 'all 0.3s ease',
-                      background: 'white',
-                      boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
-                      textDecoration: 'none',
-                      cursor:"pointer"
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = 'translateY(-10px)';
-                      e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,0,0,0.15)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.1)';
-                    }}>
+                  borderRadius: '20px',
+                  transition: 'all 0.3s ease',
+                  background: 'white',
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+                  textDecoration: 'none',
+                  cursor: "pointer"
+                }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-10px)';
+                    e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,0,0,0.15)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.1)';
+                  }}>
                   <div className="card-header d-flex align-items-center gap-3 bg-transparent">
                     <div className="rounded-circle d-flex align-items-center justify-content-center" style={{
                       width: '40px',
@@ -335,12 +334,23 @@ const UserPage = (props) => {
                     </div>
                     <h6 className="mb-0 fw-bold">Market Place</h6>
                   </div>
-                  <div className="card-body">
-                    <h5 className="card-title">Special title treatment</h5>
-                    <p className="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                  <div className="card-body p-4 d-flex flex-column">
+                    <div className="text-center mb-3">
+                      <img
+                        className="img-fluid rounded"
+                        src={props.recentItem.itemImage}
+                        alt="Item"
+                        style={{ maxHeight: "200px", objectFit: "cover" }}
+                      />
+                    </div>
+                    <div className="d-flex justify-content-between align-items-center mb-2">
+                      <h5 className="card-title mb-0">{props.recentItem.title}</h5>
+                      <h5 className="card-title  mb-0">{props.recentItem.price} ₹</h5>
+                    </div>
+                    <p className="card-text text-muted mt-2">{props.recentItem.description}</p>
                   </div>
                   <div className="card-footer text-center border-0 bg-transparent">
-                    <Link to="/market-place" style={{textDecoration:"none"}}>View All Items <i className="fa-solid fa-angle-down"></i></Link>
+                    <Link to="/market-place" style={{ textDecoration: "none" }}>View All Items <i className="fa-solid fa-angle-down"></i></Link>
                   </div>
                 </div>
               </div>

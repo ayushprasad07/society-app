@@ -497,10 +497,6 @@ const Home = () => {
           }
         }
         
-        .btn:hover {
-          transform: translateY(-2px);
-        }
-        
         .card:hover {
           transform: translateY(-5px);
         }
