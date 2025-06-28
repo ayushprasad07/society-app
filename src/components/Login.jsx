@@ -83,7 +83,7 @@ const Login = (props) => {
                         <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
                     </div>
                     <div className="form-floating mb-3">
-                        <input type="password" className="form-control" id="password" placeholder='' name='password' onChange={handleChange} />
+                        <input type="password" className="form-control" id="password" placeholder='Enter password'  autoComplete="current-password" name='password' onChange={handleChange} />
                         <label htmlFor="password" >Password</label>
                     </div>
                     <div className="mb-3">

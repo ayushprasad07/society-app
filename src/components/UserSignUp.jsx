@@ -136,7 +136,7 @@ const UserSignUp = (props) => {
                         </div>
                         <div className="mb-3">
                             <label htmlFor="password" className="form-label">Password</label>
-                            <input type="password" className="form-control" id="password" name='password' onChange={handleChange} />
+                            <input type="password" className="form-control" id="password"  autoComplete="current-password" name='password' onChange={handleChange} />
                         </div>
                         <div className="mb-3">
                             <label htmlFor="gender" className="form-label d-block">Gender</label>

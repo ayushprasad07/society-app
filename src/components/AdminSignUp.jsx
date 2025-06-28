@@ -93,7 +93,7 @@ const AdminSignUp = (props) => {
                     </div>
                     <div className="mb-3">
                         <label htmlFor="password" className="form-label">Password</label>
-                        <input type="password" className="form-control" id="password" name='password' onChange={onChange}/>
+                        <input type="password" className="form-control"  autoComplete="current-password" id="password" name='password' onChange={onChange}/>
                     </div>
                     <div className="mb-3">
                         <label htmlFor="gender" className="form-label d-block">Gender</label>
