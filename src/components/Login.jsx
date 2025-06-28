@@ -71,7 +71,7 @@ const Login = (props) => {
 
   return (
     <>
-        <div className='container py-5 mt-5 vh-100 mb-5'>
+        <div className='container d-flex justify-content-center align-tems-center py-5 mt-5 vh-100 mb-5'>
             <div className='card p-5' style={{width:"100%", maxWidth:"500px", boxShadow:"0px 0px 60px #7fcaf0"}}>
                 <img src={logo} alt="logo"  className="img-fluid d-block mx-auto mb-3" style={{ width: "150px", height: "auto" }} />
                 <h1>Welcome back,</h1>
