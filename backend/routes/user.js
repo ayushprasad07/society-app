@@ -88,13 +88,11 @@ router.post(
 
       const user = await User.findOne({ email });
       if (!user) {
-        console.log('❌ No user found with email:', email);
         return res.status(400).json({ message: 'Invalid email or password.' });
       }
 
       const passwordMatch = await bcrypt.compare(password, user.password);
       if (!passwordMatch) {
-        console.log(`❌ Password mismatch for user: ${email}`);
         return res.status(400).json({ message: 'Invalid email or password.' });
       }
 
@@ -197,16 +195,14 @@ router.get('/get-items',fetchUser,async(req,res)=>{
   try {
     const userId = req.user.id;
     const user = await User.findById(userId);
-    console.log(user.society);
     const marketPlace = await MarketPlace.find({society:user.society,userId: { $ne: userId },approved:true,isHeld:false});
-    console.log(marketPlace);
     res.status(200).json({message:"fetched successfully",marketPlace});
   } catch (error) {
     return res.status(500).json({message:"Internal Server error"});
   }
 })
 
-//ROUTE 8 : get the details of the person who has clicked buy button '/buy/:id' TODO
+// ROUTE 8 : get the details of the person who has clicked buy button '/buy/:id/:itemId'
 router.get('/buy/:id/:itemId', fetchUser, async (req, res) => {
   try {
     const interestedUserId = req.params.id;
@@ -221,20 +217,28 @@ router.get('/buy/:id/:itemId', fetchUser, async (req, res) => {
     if (!marketPlace) {
       return res.status(404).json({ message: "Item not found" });
     }
+    const alreadyInterested = marketPlace.interestedUsers.some(
+      (entry) => entry.user.toString() === interestedUserId
+    );
 
-    marketPlace.interestedUsers = { user: interestedUserId };
+    if (!alreadyInterested) {
+      marketPlace.interestedUsers.push({ user: interestedUserId });
+    }
+
     marketPlace.isHeld = true;
     marketPlace.inCart = true;
+
     await marketPlace.save();
     await marketPlace.populate('interestedUsers.user');
 
-    res.status(200).json({ marketPlace });
+    res.status(200).json({ message: "Item marked as held", marketPlace });
 
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
 
 //ROUTE 9 : Get all the item in the cart.
 router.get('/cart', fetchUser, async (req, res) => {
@@ -243,7 +247,8 @@ router.get('/cart', fetchUser, async (req, res) => {
 
     const items = await MarketPlace.find({
       'interestedUsers.user': userId,       
-      userId: { $ne: userId },              
+      userId: { $ne: userId },  
+      isHeld: false            
     })
     .populate('userId') 
     .populate('interestedUsers.user'); 
@@ -317,7 +322,7 @@ router.get('/add-to-cart/:id/:itemId', fetchUser, async (req, res) => {
 router.get('/get-sell',fetchUser,async(req,res)=>{
   try {
     const userId = req.user.id;
-    const items = await MarketPlace.find({userId:userId});
+    const items = await MarketPlace.find({userId:userId}).populate('interestedUsers.user');
     if(!userId) return res.status(400).json({message:"User not found"});
     res.status(200).json({message:"fetched successfully",items});
   } catch (error) {

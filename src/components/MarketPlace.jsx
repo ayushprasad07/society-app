@@ -3,11 +3,34 @@ import Footer from './Footer';
 import { toast } from 'react-toastify';
 import noItems from '../image/no-items.png'
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import './MarketPlace.css'
 
 
 const MarketPlace = (props) => {
   const [items,setItems] = useState([]);
   const [loading,setLoading] = useState(true);
+
+  const handleBuy = async(itemId)=>{
+    try {
+      const userId = localStorage.getItem('userId');
+      const URL = `http://localhost:4000/api/v1/user/buy/${userId}/${itemId}`;
+      const response = await fetch(URL,{
+        method:"GET",
+        headers:{
+          "auth-token":localStorage.getItem('token'),
+        }
+      })
+      const data = await response.json();
+      if(response.ok){
+        toast.success(data.message);
+        getItems();
+      }else{
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
   
 
   const handleCartClick = async(itemId)=>{
@@ -71,39 +94,6 @@ const MarketPlace = (props) => {
 
   return (
     <>
-      <style jsx>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(70px); }
-          50% { transform: translateY(-50px); }
-        }
-            .item-hero {
-                background: linear-gradient(135deg, #03045e 0%, #0096c7 100%);
-                color: white;
-                padding: 4rem 0;
-                margin-bottom: 2rem;
-            }
-            
-            .hero-title {
-                font-size: 3.5rem;
-                font-weight: 700;
-                margin-bottom: 1rem;
-                text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            }
-            
-            .hero-subtitle {
-                font-size: 1.3rem;
-                opacity: 0.9;
-                font-weight: 300;
-            }
-
-            .loading-container {
-                min-height: 70vh;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-                
-        `}</style>
         {loading && (
             <div className="loading-container py-mt-5 vh-100">
                 <div className="w-full max-w-md mx-auto px-4">
@@ -182,7 +172,7 @@ const MarketPlace = (props) => {
                                             </div>
                                             <p className="card-text text-muted mt-2">{item.description}</p>
                                             <div>
-                                              <button className='btn btn-primary mx-2 my-2'>Interested</button>
+                                              <button className='btn btn-primary mx-2 my-2' onClick={()=>{handleBuy(item._id)}}>Interested</button>
                                               <button className='btn btn-outline-primary mx-2 my-2' onClick={()=>{handleCartClick(item._id)}}>Cart</button>
                                             </div>
                                             </div>

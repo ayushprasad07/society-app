@@ -3,12 +3,13 @@ import React, { useEffect, useState } from 'react';
 import Footer from './Footer';
 
 
-const Requests = () => {
+const Requests = (props) => {
     const [residentsData, setResidentsData] = useState([]);
     const [selectedResident, setSelectedResident] = useState(null);
     
       const getResidents = async () => {
         try {
+          props.setProgress(10);
           const URL = "http://localhost:4000/api/v1/admin/pending-request";
           const response = await fetch(URL, {
             method: "POST",
@@ -17,19 +18,23 @@ const Requests = () => {
               "auth-token": localStorage.getItem("token"),
             },
           });
-    
+          props.setProgress(40);
           const data = await response.json();
+          props.setProgress(70);
           if (Array.isArray(data.pendingRequests)) {
             const sortedUsers = data.pendingRequests.sort((a, b) =>
               (a.name || "").localeCompare(b.name || "", undefined, { sensitivity: 'base' })
             );
             setResidentsData(sortedUsers);
+            props.setProgress(100);
           } else {
             console.warn("data.user is not an array");
             setResidentsData([]);
+            props.setProgress(100);
           }
         } catch (error) {
           console.log("error", error);
+          props.setProgress(100);
         }
       };
     

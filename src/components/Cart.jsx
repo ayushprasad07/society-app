@@ -1,38 +1,95 @@
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 import Footer from './Footer';
-import noItems from '../image/No-items.png'; 
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import noItems from '../image/no-items.png'
+import { toast } from 'react-toastify';
 
-const SellerPage = () => {
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const loggedInUserId = localStorage.getItem('userId');
 
-  const getItems = async () => {
+const Cart = () => {
+    const [items,setItems] = useState([]);
+    const [loading,setLoading] = useState(true);
+
+    const handleBuy = async(itemId)=>{
     try {
-      const URL = "http://localhost:4000/api/v1/user/get-sell";
-      const response = await fetch(URL, {
-        method: "GET",
-        headers: {
-          "auth-token": localStorage.getItem('token')
+      const userId = localStorage.getItem('userId');
+      const URL = `http://localhost:4000/api/v1/user/buy/${userId}/${itemId}`;
+      const response = await fetch(URL,{
+        method:"GET",
+        headers:{
+          "auth-token":localStorage.getItem('token'),
         }
-      });
+      })
       const data = await response.json();
-      if (response.ok) {
-        setItems(data.items);
-        setLoading(false);
+      if(response.ok){
+        toast.success(data.message);
+        getItems();
+      }else{
+        toast.error(data.message);
       }
     } catch (error) {
       console.log(error);
     }
-  };
+  }
 
-  useEffect(() => {
-    getItems();
-  }, []);
+    const getItems = async () => {
+        try {
+        const URL = "http://localhost:4000/api/v1/user/cart";
+        const response = await fetch(URL, {
+            method: "GET",
+            headers: {
+            "auth-token": localStorage.getItem("token"),
+            },
+        });
 
+        const data = await response.json();
+        console.log("Cart",data);
+
+        if (response.ok && Array.isArray(data.items)) {
+            const sortedItems = data.items.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            setItems(sortedItems);
+        }
+        } catch (error) {
+        console.log("Error fetching items:", error);
+        }finally{
+        setLoading(false);
+        }
+    };
+
+    useEffect(()=>{
+        getItems();
+    },[]);
+    
   return (
     <>
+      <style jsx>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(70px); }
+          50% { transform: translateY(-50px); }
+        }
+        .item-hero {
+          background: linear-gradient(135deg, #03045e 0%, #0096c7 100%);
+          color: white;
+          padding: 4rem 0;
+          margin-bottom: 2rem;
+        }
+        .hero-title {
+          font-size: 3.5rem;
+          font-weight: 700;
+          margin-bottom: 1rem;
+          text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .hero-subtitle {
+          font-size: 1.3rem;
+          opacity: 0.9;
+          font-weight: 300;
+        }
+        .loading-container {
+          min-height: 70vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      `}</style>
 
       {loading ? (
         <div className="loading-container py-mt-5 vh-100">
@@ -67,8 +124,8 @@ const SellerPage = () => {
             </div>
             <div className="container text-center py-5 mt-5">
               <h1 className="hero-title">
-                <i className="fas fa-shopping-bag me-3"></i>
-                Items you have listed for sale
+                <i class="fa-solid fa-cart-shopping mx-2"></i>
+                Cart
               </h1>
               <p className="hero-subtitle">
                 Got something to sell? Share it with your society and find buyers fast!
@@ -78,14 +135,12 @@ const SellerPage = () => {
 
           <div className='container'>
             {items.length === 0 ? (
-              <div className="empty-state text-center">
+              <div className="empty-state text-center py-5 mt-5">
                 <img src={noItems} alt='No items available' className='img-fluid' style={{ maxHeight: "300px", objectFit: "cover" }} />
               </div>
             ) : (
               <div className="row py-5 mt-5">
                 {items.map((item) => {
-                  const filteredUsers = item.interestedUsers.filter(entry => entry.user._id.toString() !== loggedInUserId?.toString());
-                  console.log("filtered user",filteredUsers)
                   return (
                     <div className="col-12 col-lg-6 col-xl-4 mb-4" key={item._id} style={{ cursor: "pointer" }}>
                       <div
@@ -113,26 +168,8 @@ const SellerPage = () => {
                             <h5 className="card-title mb-0">{item.price} ₹</h5>
                           </div>
                           <p className="card-text text-muted mt-2">{item.description}</p>
-
-                          {filteredUsers.length > 0 && (
-                            <div className="card border-0 mt-3" style={{ maxHeight: "200px", overflowY: "scroll" }}>
-                              <div className="card-header">Interested Users</div>
-                              <div className="card-body">
-                                {filteredUsers.map((entry) => (
-                                  <div className="card mb-2" key={entry._id}>
-                                    <div className="card-body">
-                                      <h5 className="card-title">{entry.user.name}</h5>
-                                      <p className="card-text">{entry.user.email}</p>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-
-                          <div>
-                            <button className='btn btn-primary mx-2 my-2'>Un-hold</button>
-                            <button className='btn btn-outline-primary mx-2 my-2'>Sold</button>
+                          <div className='mt-auto'>
+                            <button className='btn btn-primary mx-2 my-2' onClick={()=>{handleBuy(item._id)}}>Interested</button>
                           </div>
                         </div>
                       </div>
@@ -146,7 +183,7 @@ const SellerPage = () => {
       )}
       <Footer />
     </>
-  );
-};
+  )
+}
 
-export default SellerPage;
+export default Cart

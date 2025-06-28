@@ -456,51 +456,6 @@ const Home = () => {
       </div>
 
       <Footer />
-
-      {/* Enhanced CSS Animations */}
-      <style jsx>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
-        }
-        
-        @keyframes slideInLeft {
-          from {
-            transform: translateX(-100px);
-            opacity: 0;
-          }
-          to {
-            transform: translateX(0);
-            opacity: 1;
-          }
-        }
-        
-        @keyframes slideInRight {
-          from {
-            transform: translateX(100px);
-            opacity: 0;
-          }
-          to {
-            transform: translateX(0);
-            opacity: 1;
-          }
-        }
-        
-        @keyframes slideInRight {
-          from {
-            transform: translateX(100px);
-            opacity: 0;
-          }
-          to {
-            transform: translateX(0);
-            opacity: 1;
-          }
-        }
-        
-        .card:hover {
-          transform: translateY(-5px);
-        }
-      `}</style>
     </>
   );
 };

@@ -74,6 +74,8 @@ const AdminPage = () => {
       }
     } catch (error) {
       console.log(error);
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -88,7 +90,7 @@ const AdminPage = () => {
         },
       })
       const data = await response.json();
-      if(Array.isArray(data.user)){
+      if(data.user && Array.isArray(data.user)){
         setResidents(data.user.length);
       } else {
         console.warn("data.user is not an array ");
@@ -110,7 +112,7 @@ const AdminPage = () => {
         },
       })
       const data = await response.json();
-      if(Array.isArray(data.pendingRequests)){
+      if(data.pendingRequests && Array.isArray(data.pendingRequests)){
         setPendingRequest(data.pendingRequests.length);
       } else {
         console.warn("data.user is not an array ");
@@ -311,47 +313,6 @@ const AdminPage = () => {
 
   return (
     <>
-      <style jsx="true">{`
-        .no-society-container {
-          background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-          min-height: 100vh;
-        }
-        .create-society-card {
-          background: rgba(255, 255, 255, 0.95);
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .dashboard-header {
-          background: linear-gradient(135deg, #03045e 0%, #0096c7 100%);
-          color: white;
-          margin: -20px -20px 30px -20px;
-          padding: 30px 20px;
-          border-radius: 0 0 20px 20px;
-        }
-        .modal-content {
-          border-radius: 20px;
-          border: none;
-          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-        .modal-header {
-          background: linear-gradient(135deg, #03045e 0%, #0096c7 100%);
-          color: white;
-          border-radius: 20px 20px 0 0;
-          border-bottom: none;
-        }
-        .loading-container {
-          background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-          min-height: 100vh;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        @keyframes float {
-          0%, 100% { transform: translateY(70px); }
-          50% { transform: translateY(-50px); }
-        }
-      `}</style>
-
       {loading && (
         <div className="loading-container">
           <div className="text-center">
@@ -376,7 +337,7 @@ const AdminPage = () => {
                     <div className="create-society-card text-center p-5 rounded-4 shadow-lg">
                       <div className="mb-4">
                         <div 
-                          className="d-inline-block p-4 rounded-circle mb-3"
+                          className="d-inline-block p-4 mb-3"
                           style={{ backgroundColor: "#667eea20" }}
                         >
                           <img 
@@ -520,7 +481,7 @@ const AdminPage = () => {
               <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body p-4">
-              <div>
+              <form>
                 <div className="row g-3">
                   <div className="col-12">
                     <label htmlFor="name" className="form-label fw-semibold">
@@ -604,8 +565,11 @@ const AdminPage = () => {
                     <i className="fas fa-times me-2"></i>
                     Cancel
                   </button>
-                  </div>
+                  <button type="button" className="btn btn-primary px-4 py-2" onClick={createSociety}>
+                    Create Society
+                  </button>
                 </div>
+              </form>
             </div>
           </div>
         </div>

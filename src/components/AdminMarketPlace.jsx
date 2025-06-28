@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import noItems from '../image/no-items.png';
 import Footer from './Footer';
 import { toast } from 'react-toastify';
+import './AdminMarketPlace.css'
 
 const AdminMarketPlace = () => {
   const [items, setItems] = useState([]);
@@ -62,39 +63,6 @@ const AdminMarketPlace = () => {
 
   return (
     <>
-        <style jsx>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(70px); }
-          50% { transform: translateY(-50px); }
-        }
-            .item-hero {
-                background: linear-gradient(135deg, #03045e 0%, #0096c7 100%);
-                color: white;
-                padding: 4rem 0;
-                margin-bottom: 2rem;
-            }
-            
-            .hero-title {
-                font-size: 3.5rem;
-                font-weight: 700;
-                margin-bottom: 1rem;
-                text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            }
-            
-            .hero-subtitle {
-                font-size: 1.3rem;
-                opacity: 0.9;
-                font-weight: 300;
-            }
-
-            .loading-container {
-                min-height: 70vh;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-                
-        `}</style>
         {loading && (
             <div className="loading-container py-mt-5 vh-100">
                 <div className="w-full max-w-md mx-auto px-4">

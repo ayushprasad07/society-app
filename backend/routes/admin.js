@@ -137,9 +137,6 @@ router.post('/pending-request',fetchAdmin,async(req,res)=>{
     const adminId = req.admin.id;
     const admin = await Admin.findById(adminId);
     const pendingRequests = await User.find({society:admin.society ,isValid:false}).populate('society');
-    if(pendingRequests.length ===0 ){
-      return res.status(400).json({message:"No pending request"});
-    }
 
     res.status(200).json({pendingRequests})
   } catch (error) {
@@ -176,9 +173,6 @@ router.get('/viewAllRequests',fetchAdmin,async(req,res)=>{
     const adminId = req.admin.id;
     const admin = await Admin.findById(adminId);
     const user = await User.find({society:admin.society,isValid:true})
-    if(user.length===0){
-      return res.status(400).json({message:"Currently no peson in the society"});
-    }
     res.status(200).json({message:"Fetched Successfully",user});
   } catch (error) {
     console.log(error)
