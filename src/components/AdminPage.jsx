@@ -314,7 +314,7 @@ const AdminPage = () => {
   return (
     <>
       {loading && (
-        <div className="loading-container">
+        <div className="loading-container py-5 mt-5 vh-100">
           <div className="text-center">
             <DotLottieReact
               src="https://lottie.host/941f2d8d-bbd1-48b3-ad98-b7c753ad96ca/7r1WsKpxoB.lottie"
