@@ -65,7 +65,6 @@ const MarketPlace = (props) => {
       });
 
       const data = await response.json();
-      console.log(data);
 
       if (response.ok && Array.isArray(data.marketPlace)) {
         const sortedItems = data.marketPlace.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -87,10 +86,6 @@ const MarketPlace = (props) => {
   useEffect(()=>{
     getItems();
   },[]);
-
-  useEffect(()=>{
-    console.log(items)
-  },[items]);
 
   return (
     <>
@@ -138,7 +133,7 @@ const MarketPlace = (props) => {
                 </div>
                 <div className='container' >
                     {items.length === 0 ? (
-                        <div className="empty-state text-center">
+                        <div className="empty-state text-center py-5 mt-5">
                             <img src={noItems} alt='No notices available' className='img-fluid' style={{ maxHeight: "300px", objectFit: "cover" }}/>
                         </div>
                     ) : (

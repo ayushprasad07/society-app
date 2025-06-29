@@ -75,13 +75,10 @@ const UserSignUp = (props) => {
             const data = await response.json();
             console.log("Signup response:", data);
 
-            if (response.ok && data.authToken && data.user) {
+            if (response.ok  && data.user) {
                 toast.success(data.message || "Account created successfully!");
-                localStorage.setItem('token', data.authToken);
                 localStorage.setItem('userId', data.user._id);
-                toast.success(data.message || "Account created successfully!");
                 props.setProgress(100);
-                navigator("/user-page");
             } else {
                 props.setProgress(100);
                 toast.error(data.message || "Signup failed");

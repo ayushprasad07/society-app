@@ -26,34 +26,34 @@ function App() {
   const [recentNotice, setRecentNotice] = useState(() => {
     try {
       const stored = localStorage.getItem("recentNotice");
-      return stored && stored !== "undefined" ? JSON.parse(stored) : {};
+      return stored && stored !== "undefined" ? JSON.parse(stored) : null;
     } catch (e) {
       console.error("Invalid recentNotice in localStorage", e);
-      return {};
+      return null;
     }
   });
 
   const [recentEvent, setRecentEvent] = useState(() => {
     try {
       const stored = localStorage.getItem("recentEvent");
-      return stored && stored !== "undefined" ? JSON.parse(stored) : {};
+      const parsed = stored && stored !== "undefined" ? JSON.parse(stored) : null;
+      return parsed && parsed.eventImage ? parsed : null;
     } catch (e) {
       console.error("Invalid recentEvent in localStorage", e);
-      return {};
+      return null;
     }
   });
 
   const [recentItem, setRecentItem] = useState(() => {
     try {
       const stored = localStorage.getItem("recentItem");
-      return stored && stored !== "undefined" ? JSON.parse(stored) : {};
+      const parsed = stored && stored !== "undefined" ? JSON.parse(stored) : null;
+      return parsed && parsed.itemImage ? parsed : null;
     } catch (e) {
       console.error("Invalid recentItem in localStorage", e);
-      return {};
+      return null;
     }
   });
-
-
 
   const updateProgress = (progress)=>{
     setProgress(progress);
@@ -94,7 +94,7 @@ function App() {
         <Route path='/notices' element={<Notices setProgress={updateProgress}  setRecentNotice={setRecentNotice}/>}/>
         <Route path='/events' element={<Events setRecentEvent={setRecentEvent} setProgress={updateProgress}/>}/>
         <Route path='/market-place' element={<MarketPlace setRecentItem={setRecentItem}/>}/>
-        <Route path='/seller' element={<SellerPage/>}/>
+        <Route path='/seller' element={<SellerPage setProgress={updateProgress}/>}/>
         <Route path='/admin-markte-place' element={<AdminMarketPlace/>}/>
         <Route path='/cart' element={<Cart/>}/>
       </Routes>

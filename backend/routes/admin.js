@@ -308,7 +308,7 @@ router.post('/approve/:itemId',fetchAdmin,async(req,res)=>{
     const item = await MarketPlace.findById(itemId);
     item.approved = true;
     item.save();
-    res.status(200).json({message:"itema pprove",item});
+    res.status(200).json({message:"item approved",item});
   } catch (error) {
     console.log(error);
     res.status(500).json({message:"Internal server error"})

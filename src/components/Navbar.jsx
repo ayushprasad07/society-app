@@ -47,7 +47,7 @@ const Navbar = () => {
               </li>
             )}
 
-            {localStorage.getItem('userId') && (
+            {localStorage.getItem('userId') && localStorage.getItem('token') && (
               <li className="nav-item">
                 <Link
                   className={`nav-link fw-semibold ${isActive('/user-page') ? 'text-dark' : 'text-secondary'}`}
@@ -62,7 +62,7 @@ const Navbar = () => {
           {isAuthenticated ? (
             <>
               {localStorage.getItem('userId') && <Link to='/seller' className='mx-2' style={{textDecoration:"none",color:"black"}}>Sell</Link>}
-              {localStorage.getItem('userId') && <Link to='/cart' style={{textDecoration:"none",color:"black"}}><i class="fa-solid fa-cart-shopping mx-2 fs-4"></i></Link>}
+              {localStorage.getItem('userId') && <Link to='/cart' style={{textDecoration:"none",color:"black"}}><i className="fa-solid fa-cart-shopping mx-2 fs-4"></i></Link>}
               <button className="btn btn-primary mx-2" onClick={handleLogout}>
                 Logout <i className="fa-solid fa-right-from-bracket mx-2"></i>
               </button>

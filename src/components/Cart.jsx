@@ -42,8 +42,6 @@ const Cart = () => {
         });
 
         const data = await response.json();
-        console.log("Cart",data);
-
         if (response.ok && Array.isArray(data.items)) {
             const sortedItems = data.items.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
             setItems(sortedItems);
@@ -61,7 +59,7 @@ const Cart = () => {
     
   return (
     <>
-      <style jsx>{`
+      <style jsx="true">{`
         @keyframes float {
           0%, 100% { transform: translateY(70px); }
           50% { transform: translateY(-50px); }
@@ -124,11 +122,11 @@ const Cart = () => {
             </div>
             <div className="container text-center py-5 mt-5">
               <h1 className="hero-title">
-                <i class="fa-solid fa-cart-shopping mx-2"></i>
+                <i className="fa-solid fa-cart-shopping mx-2"></i>
                 Cart
               </h1>
               <p className="hero-subtitle">
-                Got something to sell? Share it with your society and find buyers fast!
+                Your cart is where great finds live before they’re yours — review, checkout, or keep browsing to discover more gems from your society!
               </p>
             </div>
           </div>

@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router';
 import Footer from './Footer';
 import societyEvent from '../image/society-event.jpg'
+import noItem from '../image/no-items.png';
+import noEvent from '../image/No-events.png';
+import noNotice from '../image/No notice.png'
 
 const UserPage = (props) => {
   const [user, setUser] = useState([]);
@@ -255,8 +258,16 @@ const UserPage = (props) => {
                     <h6 className="mb-0 fw-bold">Latest Notice</h6>
                   </div>
                   <div className="card-body">
-                    <h5 className="card-title">{props.recentNotice?.title || "No recent notices"}</h5>
-                    <p className="card-text">{props.recentNotice?.content || "Nothing to show right now."}</p>
+                    {props.recentNotice ? (
+                      <>
+                        <h5 className="card-title">{props.recentNotice?.title || "No recent notices"}</h5>
+                        <p className="card-text">{props.recentNotice?.content || "Nothing to show right now."}</p>
+                      </>
+                    ):(
+                      <div>
+                        <img src={noNotice} alt="no items" className='img-fluid' />
+                      </div>
+                    )}
                   </div>
                   <div className="card-footer text-center border-0 bg-transparent">
                     <Link to="/notices" style={{ textDecoration: "none" }}>View All Notices <i className="fa-solid fa-angle-down"></i></Link>
@@ -292,14 +303,22 @@ const UserPage = (props) => {
                     <h6 className="mb-0 fw-bold">Latest Event</h6>
                   </div>
                   <div className="card-body">
-                    <img
-                      src={props.recentEvent.eventImage.length === 0 ? societyEvent : props.recentEvent.eventImage}
-                      className="card-img-top img-fluid"
-                      alt="Event"
-                      style={{ objectFit: "cover", height: "200px" }}
-                    />
-                    <h5 className="card-title my-2">{props.recentEvent.title || "No recent event"}</h5>
-                    <p className="card-text">{props.recentEvent.content || "Nothing to show right now"}</p>
+                    {props.recentEvent ? (
+                      <>
+                        <img
+                        src={props.recentEvent.eventImage.length === 0 ? societyEvent : props.recentEvent.eventImage}
+                        className="card-img-top img-fluid"
+                        alt="Event"
+                        style={{ objectFit: "cover", height: "200px" }}
+                        />
+                        <h5 className="card-title my-2">{props.recentEvent.title || "No recent event"}</h5>
+                        <p className="card-text">{props.recentEvent.content || "Nothing to show right now"}</p>
+                      </>
+                    ):(
+                      <div>
+                        <img src={noEvent} alt="no items" className='img-fluid' />
+                      </div>
+                    )}
                   </div>
                   <div className="card-footer text-center border-0 bg-transparent">
                     <Link to="/events" style={{ textDecoration: "none" }}>View All Events <i className="fa-solid fa-angle-down"></i></Link>
@@ -335,19 +354,27 @@ const UserPage = (props) => {
                     <h6 className="mb-0 fw-bold">Market Place</h6>
                   </div>
                   <div className="card-body p-4 d-flex flex-column">
-                    <div className="text-center mb-3">
-                      <img
-                        className="img-fluid rounded"
-                        src={props.recentItem.itemImage}
-                        alt="Item"
-                        style={{ maxHeight: "200px", objectFit: "cover" }}
-                      />
-                    </div>
-                    <div className="d-flex justify-content-between align-items-center mb-2">
-                      <h5 className="card-title mb-0">{props.recentItem.title}</h5>
-                      <h5 className="card-title  mb-0">{props.recentItem.price} ₹</h5>
-                    </div>
-                    <p className="card-text text-muted mt-2">{props.recentItem.description}</p>
+                    {!props.recentItem ? (
+                      <div>
+                        <img src={noItem} alt="no items" className='img-fluid' />
+                      </div>
+                    ):(
+                      <>
+                        <div className="text-center mb-3">
+                          <img
+                            className="img-fluid rounded"
+                            src={props.recentItem.itemImage}
+                            alt="Item"
+                            style={{ maxHeight: "200px", objectFit: "cover" }}
+                          />
+                        </div>
+                        <div className="d-flex justify-content-between align-items-center mb-2">
+                          <h5 className="card-title mb-0">{props.recentItem.title}</h5>
+                          <h5 className="card-title  mb-0">{props.recentItem.price} ₹</h5>
+                        </div>
+                        <p className="card-text text-muted mt-2">{props.recentItem.description}</p>
+                      </>
+                    )}
                   </div>
                   <div className="card-footer text-center border-0 bg-transparent">
                     <Link to="/market-place" style={{ textDecoration: "none" }}>View All Items <i className="fa-solid fa-angle-down"></i></Link>

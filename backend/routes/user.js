@@ -54,13 +54,9 @@ router.post(
         society,
       });
 
-      const payload = { users: { id: newUser._id.toString() } };
-      const authToken = jwt.sign(payload, process.env.JWT_SECRET);
-
       res.status(200).json({
         message: 'Account created successfully. Awaiting admin approval.',
         user: newUser,
-        authToken,
       });
     } catch (error) {
       console.error('Signup Error:', error);
@@ -195,7 +191,7 @@ router.get('/get-items',fetchUser,async(req,res)=>{
   try {
     const userId = req.user.id;
     const user = await User.findById(userId);
-    const marketPlace = await MarketPlace.find({society:user.society,userId: { $ne: userId },approved:true,isHeld:false});
+    const marketPlace = await MarketPlace.find({society:user.society,userId: { $ne: userId },approved:true,isHeld:false,isSold:false});
     res.status(200).json({message:"fetched successfully",marketPlace});
   } catch (error) {
     return res.status(500).json({message:"Internal Server error"});
@@ -282,6 +278,8 @@ router.get('/release/:itemId',fetchUser,async(req,res)=>{
     const item = await MarketPlace.findById(itemId);
     if(!item) return res.status(400).json({message:"item not found"});
     item.isSold = false;
+    item.isHeld = false;
+    item.interestedUsers = [];
     item.save();
     res.status(200).json({message:"Item released",item});
   } catch (error) {
@@ -322,7 +320,7 @@ router.get('/add-to-cart/:id/:itemId', fetchUser, async (req, res) => {
 router.get('/get-sell',fetchUser,async(req,res)=>{
   try {
     const userId = req.user.id;
-    const items = await MarketPlace.find({userId:userId}).populate('interestedUsers.user');
+    const items = await MarketPlace.find({userId:userId,approved:true}).populate('interestedUsers.user');
     if(!userId) return res.status(400).json({message:"User not found"});
     res.status(200).json({message:"fetched successfully",items});
   } catch (error) {
