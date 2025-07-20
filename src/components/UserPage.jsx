@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import  { useEffect, useState } from 'react'
 import { Link } from 'react-router';
 import Footer from './Footer';
 import societyEvent from '../image/society-event.jpg'

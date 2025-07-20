@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import noImage from '../image/default.jpg'
+import { useState } from 'react'
 import logo from '../image/CommunityHub logo.png'
 import Footer from './Footer'
 import { useNavigate } from 'react-router'

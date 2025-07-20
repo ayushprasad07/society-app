@@ -1,5 +1,5 @@
 import noImage from '../image/default.jpg';
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import Footer from './Footer';
 
 

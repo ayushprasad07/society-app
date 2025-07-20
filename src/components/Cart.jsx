@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import  { useEffect, useState } from 'react'
 import Footer from './Footer';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import noItems from '../image/no-items.png'

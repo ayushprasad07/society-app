@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import  { useEffect, useState } from 'react'
 import Footer from './Footer';
 import noEvent from '../image/No-events.png'
 import societyEvent from '../image/society-event.jpg'

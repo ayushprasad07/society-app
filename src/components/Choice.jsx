@@ -1,5 +1,4 @@
-import React from 'react'
-import noImage from '../image/default.jpg'
+
 import { Link } from 'react-router-dom'
 import Footer from './Footer'
 

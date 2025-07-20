@@ -1,5 +1,5 @@
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import noItems from '../image/no-items.png';
 import Footer from './Footer';
 import { toast } from 'react-toastify';

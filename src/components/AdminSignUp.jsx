@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import  { useState } from 'react'
 import Footer from './Footer'
 import logo from '../image/CommunityHub logo.png'
 import noImage from '../image/default.jpg'
