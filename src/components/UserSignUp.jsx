@@ -14,7 +14,7 @@ const UserSignUp = (props) => {
     const [query, setQuery] = useState("");
     const navigator = useNavigate();
 
-    const API = import.meta.env.VITE_API_URL;
+    const API = "https://society-app-1.onrender.com";
 
     useEffect(() => {
         const fetchSocieties = async () => {
