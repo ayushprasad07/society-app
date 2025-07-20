@@ -259,14 +259,7 @@ const Login = (props) => {
                 box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
             }
             
-            .card {
-                transition: all 0.3s ease;
-            }
             
-            .card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
-            }
             
             .form-floating > label {
                 padding-left: 1rem;
