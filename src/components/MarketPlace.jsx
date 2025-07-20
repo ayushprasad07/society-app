@@ -166,6 +166,7 @@ const MarketPlace = (props) => {
                                                 <h5 className="card-title  mb-0">{item.price} ₹</h5>
                                             </div>
                                             <p className="card-text text-muted mt-2">{item.description}</p>
+                                            <p className="card-text text-muted mt-2">Venue : {item.venue}</p>
                                             <div>
                                               <button className='btn btn-primary mx-2 my-2' onClick={()=>{handleBuy(item._id)}}>Interested</button>
                                               <button className='btn btn-outline-primary mx-2 my-2' onClick={()=>{handleCartClick(item._id)}}>Cart</button>

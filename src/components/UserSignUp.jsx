@@ -100,8 +100,8 @@ const UserSignUp = (props) => {
     return (
         <>
             <div className='container d-flex justify-content-center align-items-center' style={{ marginTop: "70px", marginBottom: "50px" }}>
-                <div className="card p-4" style={{
-                    width: "100%", maxWidth: "500px", boxShadow: "0px 0px 20px white"
+                <div className="card p-4 shadow-lg border-0" style={{
+                    width: "100%", maxWidth: "500px", borderRadius: '20px'
                 }}>
                     <img
                         src={logo}
@@ -167,7 +167,19 @@ const UserSignUp = (props) => {
                                 </ul>
                             )}
                         </div>
-                        <button type="submit" className="btn btn-primary">Submit</button>
+                        <button 
+                            type="submit" 
+                            className="btn btn-primary w-100 py-3 rounded-pill fw-semibold shadow-sm"
+                            style={{
+                                background: 'linear-gradient(135deg, #03045e 0%, #0096c7 100%)',
+                                border: 'none',
+                                fontSize: '1.1rem',
+                                transition: 'all 0.3s ease'
+                             }}
+                        >
+                            <i className="bi bi-box-arrow-in-right me-2"></i>
+                                Create Account
+                        </button>
                     </form>
                 </div>
             </div>
