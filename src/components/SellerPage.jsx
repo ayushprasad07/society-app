@@ -11,6 +11,8 @@ const SellerPage = (props) => {
   const [itemDetails,setItemDetails] = useState({title:"",description:"",price:"",venue:"",phone:""});
   const [file,setFile] = useState(null);
 
+  const API = import.meta.env.VITE_API_URL;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -27,7 +29,7 @@ const SellerPage = (props) => {
       formData.append("itemImage", file);
     }
 
-    const URL = "http://localhost:4000/api/v1/user/sell-item";
+    const URL = `${API}/api/v1/user/sell-item`;
     props.setProgress(40);
     try {
       const response = await fetch(URL, {
@@ -75,7 +77,7 @@ const SellerPage = (props) => {
   const handleRelease = async (itemId)=>{
     try {
       props.setProgress(10);
-      const URL = `http://localhost:4000/api/v1/user/release/${itemId}`;
+      const URL = `${API}/api/v1/user/release/${itemId}`;
       const response = await fetch(URL, {
         method: "GET",
         headers: {
@@ -99,7 +101,7 @@ const SellerPage = (props) => {
   const handleSold = async (itemId)=>{
     try {
       props.setProgress(10);
-      const URL = `http://localhost:4000/api/v1/user/sold/${itemId}`;
+      const URL = `${API}/api/v1/user/sold/${itemId}`;
       const response = await fetch(URL, {
         method: "GET",
         headers: {
@@ -123,7 +125,7 @@ const SellerPage = (props) => {
   const getItems = async () => {
     try {
       props.setProgress(10);
-      const URL = "http://localhost:4000/api/v1/user/get-sell";
+      const URL = `${API}/api/v1/user/get-sell`;
       const response = await fetch(URL, {
         method: "GET",
         headers: {

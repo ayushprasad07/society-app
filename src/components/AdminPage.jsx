@@ -15,33 +15,35 @@ const AdminPage = () => {
   const [pendinRequest, setPendingRequest] = useState(0);
   const [events, setEvents] = useState(0);
   const [notices, setNotices] = useState(0);
-  const [societyInfo, setSocietyInfo] = useState({name:"", address:"", city:"", state:"", pincode:""})
+  const [societyInfo, setSocietyInfo] = useState({
+    name: "",
+    address: "",
+    city: "",
+    state: "",
+    pincode: ""
+  });
   const [loading, setLoading] = useState(true);
-  const [items,setItems] = useState([]);
+  const [items, setItems] = useState([]);
 
-  const createSociety = async(e) => {
+  const API = import.meta.env.VITE_API_URL;
+
+  const createSociety = async (e) => {
     e.preventDefault();
     try {
-      const{name, address, city, state, pincode} = societyInfo;
-      const URL = "http://localhost:4000/api/v1/admin/create-society";
+      const { name, address, city, state, pincode } = societyInfo;
+      const URL = `${API}/api/v1/admin/create-society`;
       const response = await fetch(URL, {
-        method:"POST",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           "auth-token": localStorage.getItem("token"),
         },
-        body: JSON.stringify({
-          name,
-          address,
-          city,
-          state,
-          pincode
-        })
-      })
+        body: JSON.stringify({ name, address, city, state, pincode })
+      });
       const data = await response.json();
       if (response.ok) {
-        setSociety(data.society); 
-        setSocietyInfo({ name: "", address: "", city: "", state: "", pincode: "" }); 
+        setSociety(data.society);
+        setSocietyInfo({ name: "", address: "", city: "", state: "", pincode: "" });
         const modal = bootstrap.Modal.getInstance(document.getElementById('exampleModal'));
         modal.hide();
       } else {
@@ -50,16 +52,16 @@ const AdminPage = () => {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const handleChange = (e) => {
-    setSocietyInfo({...societyInfo, [e.target.name]: e.target.value})
-  }
+    setSocietyInfo({ ...societyInfo, [e.target.name]: e.target.value });
+  };
 
   const getAdmin = async () => {
     try {
       const adminId = localStorage.getItem("adminId");
-      const URL = `http://localhost:4000/api/v1/admin/get-admin/${adminId}`;
+      const URL = `${API}/api/v1/admin/get-admin/${adminId}`;
       const response = await fetch(URL, {
         method: "GET",
         headers: {
@@ -74,67 +76,65 @@ const AdminPage = () => {
       }
     } catch (error) {
       console.log(error);
-    }finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
 
-  const getResidents = async() => {
+  const getResidents = async () => {
     try {
-      const URL = "http://localhost:4000/api/v1/admin/viewAllRequests";
+      const URL = `${API}/api/v1/admin/viewAllRequests`;
       const response = await fetch(URL, {
-        method:"GET",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           "auth-token": localStorage.getItem("token"),
         },
-      })
+      });
       const data = await response.json();
-      if(data.user && Array.isArray(data.user)){
+      if (data.user && Array.isArray(data.user)) {
         setResidents(data.user.length);
       } else {
-        console.warn("data.user is not an array ");
         setResidents(0);
       }
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
-  const getPendingRequest = async() => {
+  const getPendingRequest = async () => {
     try {
-      const URL = "http://localhost:4000/api/v1/admin/pending-request";
+      const URL = `${API}/api/v1/admin/pending-request`;
       const response = await fetch(URL, {
-        method:"POST",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           "auth-token": localStorage.getItem("token"),
         },
-      })
+      });
       const data = await response.json();
-      if(data.pendingRequests && Array.isArray(data.pendingRequests)){
+      if (data.pendingRequests && Array.isArray(data.pendingRequests)) {
         setPendingRequest(data.pendingRequests.length);
       } else {
-        console.warn("data.user is not an array ");
         setPendingRequest(0);
       }
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
-  const getEvents = async() => {
+  const getEvents = async () => {
     try {
-      const URL = "http://localhost:4000/api/v1/admin/get-events";
+      const URL = `${API}/api/v1/admin/get-events`;
       const response = await fetch(URL, {
-        method:"GET",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           "auth-token": localStorage.getItem("token"),
         },
-      })
+      });
       const data = await response.json();
-      if(Array.isArray(data.event)){
+      if (Array.isArray(data.event)) {
         setEvents(data.event.length);
       } else {
         setEvents(0);
@@ -142,20 +142,20 @@ const AdminPage = () => {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
-  const getNotices = async() => {
+  const getNotices = async () => {
     try {
-      const URL = "http://localhost:4000/api/v1/admin/get-notice";
+      const URL = `${API}/api/v1/admin/get-notice`;
       const response = await fetch(URL, {
-        method:"GET",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           "auth-token": localStorage.getItem("token"),
         },
-      })
+      });
       const data = await response.json();
-      if(Array.isArray(data.notices)){
+      if (Array.isArray(data.notices)) {
         setNotices(data.notices.length);
       } else {
         setNotices(0);
@@ -163,29 +163,28 @@ const AdminPage = () => {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
-  const getItems  = async()=>{
-        try {
-        const URL = "http://localhost:4000/api/v1/admin/get-items";
-        const response = await fetch(URL, {
-            method:"GET",
-            headers: {
-            "Content-Type": "application/json",
-            "auth-token": localStorage.getItem("token"),
-            },
-        })
-        const data = await response.json();
-        if(Array.isArray(data.items)){
-            setItems(data.items.length);
-        } else {
-            setItems([]);
-        }
-        } catch (error) {
-            console.log(error);
-        }
-        
+  const getItems = async () => {
+    try {
+      const URL = `${API}/api/v1/admin/get-items`;
+      const response = await fetch(URL, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      });
+      const data = await response.json();
+      if (Array.isArray(data.items)) {
+        setItems(data.items.length);
+      } else {
+        setItems(0);
+      }
+    } catch (error) {
+      console.log(error);
     }
+  };
 
   useEffect(() => {
     getAdmin();

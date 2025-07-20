@@ -10,6 +10,8 @@ const Login = (props) => {
     const [credentials,setCredentials] = useState({email:"",password:"",type:""});
     const [showPassword, setShowPassword] = useState(false);
 
+    const API = import.meta.env.VITE_API_URL;
+
     const navigator = useNavigate();
 
     const handleSubmit = async(e)=>{
@@ -18,7 +20,7 @@ const Login = (props) => {
         props.setProgress(10);
         const {email,password,type} = credentials;
         try {
-            const URL = `http://localhost:4000/api/v1/${type}/login`
+            const URL = `${API}/api/v1/${type}/login`
             props.setProgress(40);
             const response = await fetch(URL,{
                 method:"POST",

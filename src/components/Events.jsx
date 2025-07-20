@@ -11,6 +11,8 @@ const Events = (props) => {
   const [file,setFile] = useState(null);
   const [loading,setLoading] = useState(true);
 
+  const API = import.meta.env.VITE_API_URL;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -26,7 +28,7 @@ const Events = (props) => {
       formData.append("eventImage", file);
     }
 
-    const URL = "http://localhost:4000/api/v1/admin/create-event";
+    const URL = `${API}/api/v1/admin/create-event`;
 
     try {
       const response = await fetch(URL, {
@@ -74,7 +76,7 @@ const Events = (props) => {
     try {
       if(localStorage.getItem('adminId')){
             props.setProgress(10);
-            const URL = "http://localhost:4000/api/v1/admin/get-events";
+            const URL = `${API}/api/v1/admin/get-events`;
             const response = await fetch(URL,{
                 method:"GET",
                 headers: {
@@ -101,7 +103,7 @@ const Events = (props) => {
             }
       }else{
             props.setProgress(10);
-            const URL = "http://localhost:4000/api/v1/user/get-events";
+            const URL = `${API}/api/v1/user/get-events`;
             const response = await fetch(URL,{
                 method:"GET",
                 headers: {

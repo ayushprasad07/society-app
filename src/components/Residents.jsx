@@ -6,10 +6,12 @@ const Residents = (props) => {
   const [residentsData, setResidentsData] = useState([]);
   const [selectedResident, setSelectedResident] = useState(null);
 
+  const API = import.meta.env.VITE_API_URL;
+
   const getResidents = async () => {
     try {
       props.setProgress(10);
-      const URL = "http://localhost:4000/api/v1/admin/viewAllRequests";
+      const URL = `${API}/api/v1/admin/viewAllRequests`;
       const response = await fetch(URL, {
         method: "GET",
         headers: {
@@ -40,7 +42,7 @@ const Residents = (props) => {
   const handleRemove = async () => {
     if (!selectedResident) return;
     try {
-      const URL = `http://localhost:4000/api/v1/admin/reject-request/${selectedResident._id}`;
+      const URL = `${API}/api/v1/admin/reject-request/${selectedResident._id}`;
       const response = await fetch(URL, {
         method: "DELETE",
         headers: {

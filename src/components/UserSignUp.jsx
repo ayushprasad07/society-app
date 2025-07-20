@@ -14,10 +14,12 @@ const UserSignUp = (props) => {
     const [query, setQuery] = useState("");
     const navigator = useNavigate();
 
+    const API = import.meta.env.VITE_API_URL;
+
     useEffect(() => {
         const fetchSocieties = async () => {
             try {
-                const URL = "http://localhost:4000/api/v1/society/get-societies";
+                const URL = `${API}/api/v1/society/get-societies`;
                 const response = await fetch(URL, {
                     method: "GET"
                 });
@@ -58,7 +60,7 @@ const UserSignUp = (props) => {
         props.setProgress(10);
         e.preventDefault();
         try {
-            const URL = "http://localhost:4000/api/v1/user/signUp";
+            const URL = `${API}/api/v1/user/signUp`;
             const formData = new FormData();
             for (let key in credentials) {
                 formData.append(key, credentials[key]);

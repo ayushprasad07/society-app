@@ -9,10 +9,12 @@ const Cart = () => {
     const [items,setItems] = useState([]);
     const [loading,setLoading] = useState(true);
 
+    const API = import.meta.env.VITE_API_URL;
+
     const handleBuy = async(itemId)=>{
     try {
       const userId = localStorage.getItem('userId');
-      const URL = `http://localhost:4000/api/v1/user/buy/${userId}/${itemId}`;
+      const URL = `${API}/api/v1/user/buy/${userId}/${itemId}`;
       const response = await fetch(URL,{
         method:"GET",
         headers:{
@@ -33,7 +35,7 @@ const Cart = () => {
 
     const getItems = async () => {
         try {
-        const URL = "http://localhost:4000/api/v1/user/cart";
+        const URL = `${API}/api/v1/user/cart`;
         const response = await fetch(URL, {
             method: "GET",
             headers: {

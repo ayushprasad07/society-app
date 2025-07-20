@@ -9,6 +9,8 @@ const Notices = (props) => {
     const [noticeInfo,setNoticeInfo] = useState({type:"",title:"",content:""});
     const [loading,setLoading] = useState(true);
 
+    const API = import.meta.env.VITE_API_URL;
+
     const handleChange = (e)=>{
         setNoticeInfo({...noticeInfo,[e.target.name]:e.target.value});
     }
@@ -17,7 +19,7 @@ const Notices = (props) => {
         e.preventDefault();
         try {
             props.setProgress(10);
-            const URL = "http://localhost:4000/api/v1/admin/create-notice";
+            const URL = `${API}/api/v1/admin/create-notice`;
             const {type,title,content} = noticeInfo;
             props.setProgress(40);
             const response = await fetch(URL,{
@@ -53,7 +55,7 @@ const Notices = (props) => {
         try {
             if(localStorage.getItem('adminId')){
                 props.setProgress(10);
-                const URL = "http://localhost:4000/api/v1/admin/get-notice";
+                const URL = `${API}/api/v1/admin/get-notice`;
                 const response = await fetch(URL,{
                     method:"GET",
                     headers: {
@@ -77,7 +79,7 @@ const Notices = (props) => {
                 }
             }else{
                 props.setProgress(10);
-                const URL = "http://localhost:4000/api/v1/user/get-notices";
+                const URL = `${API}/api/v1/user/get-notices`;
                 props.setProgress(40);
                 const response = await fetch(URL,{
                     method:"GET",

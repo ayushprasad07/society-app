@@ -10,6 +10,8 @@ const AdminSignUp = (props) => {
     const [credentials,setCredentials] = useState({name:"",email:"",password:"",gender:""})
     const [file,setFile] = useState(null);
 
+    const API = import.meta.env.VITE_API_URL;
+
     const navigator = useNavigate();
 
     const handleSubmit = async (e)=>{
@@ -27,7 +29,7 @@ const AdminSignUp = (props) => {
         }
         props.setProgress(40);
         try {
-            const URL = 'http://localhost:4000/api/v1/admin/signUp';
+            const URL = `${API}/api/v1/admin/signUp`;
             const response = await fetch(URL,{
                 method:"POST",
                 body:fromData

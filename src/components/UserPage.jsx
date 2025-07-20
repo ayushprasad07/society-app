@@ -9,10 +9,12 @@ import noNotice from '../image/No notice.png'
 const UserPage = (props) => {
   const [user, setUser] = useState([]);
 
+  const API = import.meta.env.VITE_API_URL;
+
   const getUser = async () => {
     try {
       const userId = localStorage.getItem('userId');
-      const URL = `http://localhost:4000/api/v1/user/get-user/${userId}`;
+      const URL = `${API}/api/v1/user/get-user/${userId}`;
       const response = await fetch(URL, {
         method: "GET",
         headers: {

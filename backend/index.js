@@ -6,7 +6,10 @@ connectToMongo();
 const app = express()
 const port = 4000
 
-app.use(cors());
+app.use(cors({
+  origin: "https://society-app-n8yj.vercel.app",
+  credentials: true,
+}));
 app.use(express.json());
 
 app.use('/api/v1/admin',require('./routes/admin'));

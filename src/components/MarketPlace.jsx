@@ -10,10 +10,12 @@ const MarketPlace = (props) => {
   const [items,setItems] = useState([]);
   const [loading,setLoading] = useState(true);
 
+  const API = import.meta.env.VITE_API_URL;
+
   const handleBuy = async(itemId)=>{
     try {
       const userId = localStorage.getItem('userId');
-      const URL = `http://localhost:4000/api/v1/user/buy/${userId}/${itemId}`;
+      const URL = `${API}/api/v1/user/buy/${userId}/${itemId}`;
       const response = await fetch(URL,{
         method:"GET",
         headers:{
@@ -36,7 +38,7 @@ const MarketPlace = (props) => {
   const handleCartClick = async(itemId)=>{
     try {
       const userId = localStorage.getItem('userId');
-      const URL = `http://localhost:4000/api/v1/user/add-to-cart/${userId}/${itemId}`;
+      const URL = `${API}/api/v1/user/add-to-cart/${userId}/${itemId}`;
       const response = await fetch(URL,{
         method:"GET",
         headers:{
@@ -56,7 +58,7 @@ const MarketPlace = (props) => {
 
   const getItems = async () => {
     try {
-      const URL = "http://localhost:4000/api/v1/user/get-items";
+      const URL = `${API}/api/v1/user/get-items`;
       const response = await fetch(URL, {
         method: "GET",
         headers: {

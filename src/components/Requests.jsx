@@ -6,11 +6,13 @@ import Footer from './Footer';
 const Requests = (props) => {
     const [residentsData, setResidentsData] = useState([]);
     const [selectedResident, setSelectedResident] = useState(null);
+
+    const API = import.meta.env.VITE_API_URL;
     
       const getResidents = async () => {
         try {
           props.setProgress(10);
-          const URL = "http://localhost:4000/api/v1/admin/pending-request";
+          const URL = `${API}/api/v1/admin/pending-request`;
           const response = await fetch(URL, {
             method: "POST",
             headers: {
@@ -41,7 +43,7 @@ const Requests = (props) => {
       const handleAccept = async () => {
         if (!selectedResident) return;
         try {
-          const URL = `http://localhost:4000/api/v1/admin/approve-request/${selectedResident._id}`;
+          const URL = `${API}/api/v1/admin/approve-request/${selectedResident._id}`;
           const response = await fetch(URL, {
             method: "POST",
             headers: {
