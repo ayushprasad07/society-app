@@ -7,7 +7,7 @@ const app = express()
 const port = 4000
 
 app.use(cors({
-  origin: "https://society-app-n8yj.vercel.app/",
+  origin: "https://society-app-n8yj.vercel.app",
   credentials: true,
 }));
 app.use(express.json());
