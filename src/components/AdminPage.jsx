@@ -6,7 +6,7 @@ import { Link } from "react-router";
 import adminEvents from '../image/upcoming-events.png'
 import adminNotice from '../image/admin-notice.png'
 import adminRequest from '../image/admin-request.png'
-import adminResident from '../image/admin-resident.png'
+import adminResident from '../image/Admin-resident.png'
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 const AdminPage = () => {
