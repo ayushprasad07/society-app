@@ -9,7 +9,7 @@ import noNotice from '../image/No notice.png'
 const UserPage = (props) => {
   const [user, setUser] = useState([]);
 
-  const API = import.meta.env.VITE_API_URL;
+  const API = "https://society-app-1.onrender.com";
 
   const getUser = async () => {
     try {

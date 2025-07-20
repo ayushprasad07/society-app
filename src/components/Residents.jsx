@@ -6,7 +6,7 @@ const Residents = (props) => {
   const [residentsData, setResidentsData] = useState([]);
   const [selectedResident, setSelectedResident] = useState(null);
 
-  const API = import.meta.env.VITE_API_URL;
+  const API = "https://society-app-1.onrender.com";
 
   const getResidents = async () => {
     try {

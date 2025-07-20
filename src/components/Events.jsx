@@ -11,7 +11,7 @@ const Events = (props) => {
   const [file,setFile] = useState(null);
   const [loading,setLoading] = useState(true);
 
-  const API = import.meta.env.VITE_API_URL;
+  const API = "https://society-app-1.onrender.com";
 
   const handleSubmit = async (e) => {
     e.preventDefault();

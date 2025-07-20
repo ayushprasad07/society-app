@@ -11,7 +11,7 @@ const SellerPage = (props) => {
   const [itemDetails,setItemDetails] = useState({title:"",description:"",price:"",venue:"",phone:""});
   const [file,setFile] = useState(null);
 
-  const API = import.meta.env.VITE_API_URL;
+  const API = "https://society-app-1.onrender.com";
 
   const handleSubmit = async (e) => {
     e.preventDefault();

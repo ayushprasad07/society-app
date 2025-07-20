@@ -9,7 +9,7 @@ const Notices = (props) => {
     const [noticeInfo,setNoticeInfo] = useState({type:"",title:"",content:""});
     const [loading,setLoading] = useState(true);
 
-    const API = import.meta.env.VITE_API_URL;
+    const API = "https://society-app-1.onrender.com";
 
     const handleChange = (e)=>{
         setNoticeInfo({...noticeInfo,[e.target.name]:e.target.value});
