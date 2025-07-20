@@ -1,7 +1,7 @@
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { useEffect, useState } from 'react';
 import Footer from './Footer';
-import noItems from '../image/No-items.png'; 
+import noItems from '../image/no-items.png'; 
 import { toast } from 'react-toastify';
 
 const SellerPage = (props) => {
