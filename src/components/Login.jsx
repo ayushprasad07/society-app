@@ -10,7 +10,7 @@ const Login = (props) => {
     const [credentials,setCredentials] = useState({email:"",password:"",type:""});
     const [showPassword, setShowPassword] = useState(false);
 
-    const API = import.meta.env.VITE_API_URL;
+    const API = "https://society-app-1.onrender.com";
 
     const navigator = useNavigate();
 
