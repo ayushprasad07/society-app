@@ -6,6 +6,7 @@ import event from '../image/Events.png'
 import market from '../image/MarketPlace.png'
 import building from '../image/Community Building.png'
 import secure from '../image/secure.png'
+import { Link } from 'react-router';
 
 const Home = () => {
   return (
@@ -63,8 +64,8 @@ const Home = () => {
                   </p>
                 </div>
                 
-                <div className="mb-4" style={{ animation: 'slideInLeft 1s ease-out 0.3s both' }}>
-                  <a 
+                {/* <div className="mb-4" style={{ animation: 'slideInLeft 1s ease-out 0.3s both' }}>
+                  <Link 
                     href="/admin-sign-up" 
                     className="btn btn-lg px-5 py-3 me-3 mb-3 position-relative overflow-hidden"
                     style={{
@@ -87,8 +88,8 @@ const Home = () => {
                     }}
                   >
                     Get Started as Admin
-                  </a>
-                </div>
+                  </Link>
+                </div> */}
 
                 <div className='row g-0' style={{ animation: 'slideInLeft 1s ease-out 0.6s both' }}>
                   <div className='col-12'>
